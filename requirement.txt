@@ -1,0 +1,180 @@
+Build a modern, professional Next.js 14 website for "Ride Home Designated Drivers" — 
+a designated driver service operating in Mississauga, Oakville, Burlington, Hamilton, 
+and the GTA (Ontario, Canada).
+
+---
+
+## 🎨 Design Style
+- Dark, premium feel with deep navy (#0B1120) as the base background
+- Accent color: bright red (#E63946) for CTAs and highlights
+- Secondary accent: gold/amber (#F4A261) for trust badges and icons
+- Clean white text on dark backgrounds
+- Font: Inter or Geist Sans
+- Mobile-first, fully responsive
+- Subtle animations using Framer Motion (fade-in on scroll, button hover effects)
+
+---
+
+## 🗂️ Pages to Build
+
+### 1. Home Page (/)
+- Hero section with headline: "Get You AND Your Car Home Safely"
+  - Subtext: "Ontario's trusted designated driver service since 2011"
+  - Two CTA buttons: "Book a Ride" and "Get a Quote"
+  - Background: dark overlay on a nighttime city/road image
+- "How It Works" section — 3 steps with icons:
+  1. Book Your Ride (phone or app)
+  2. Enjoy Your Evening
+  3. Get Home Safe
+- Service Cards section (4 cards):
+  - Standard Designated Driver
+  - Special Events & Weddings
+  - Vehicle Drop Service
+  - Medical & Senior Driver Service
+- Trust/Stats bar: "13+ Years Experience | 2 Drivers Per Trip | GTA & Surrounding Areas"
+- Testimonials carousel (3 dummy reviews)
+- CTA Banner: "Don't Risk It. Book Your Ride Tonight."
+- Footer with logo, nav links, phone numbers, hours, social icons
+
+---
+
+### 2. Services & Pricing Page (/services)
+- Hero with title "Our Services & Pricing"
+- 4 detailed service sections with icons, descriptions, and use-case bullet points:
+
+  **Standard DD Service**
+  - $31.00 minimum (first 10 km)
+  - $2.75 per additional km
+  - $1.00/min standby after 5-min grace
+  - Flat rates for 50km+
+  - 407-ETR charges extra if applicable
+
+  **Special Events & Weddings**
+  - Group & standby rates available
+  - Suitable for: Christmas parties, corporate events, weddings, golf tournaments
+  - Reservation requires valid credit card
+
+  **Vehicle Drop Service**
+  - Drop car to mechanic, airport, detailer
+  - Perfect for vacations or busy schedules
+
+  **Medical & Senior Service**
+  - Post-procedure transportation
+  - Multi-stop errands (pharmacy, grocery, salon)
+  - Mobility assistance door-to-door
+
+- Pricing FAQ accordion at the bottom
+
+---
+
+### 3. Booking Page (/book)
+- Multi-step booking form (3 steps):
+
+  **Step 1 — Ride Details**
+  - Service type selector (dropdown or card selection):
+    - Standard Designated Driver
+    - Special Event / Wedding
+    - Vehicle Drop
+    - Medical / Senior
+  - Pickup date & time (date picker)
+  - Pickup address (text input)
+  - Drop-off address (text input)
+  - Estimated distance (auto or manual input)
+  - Special notes / instructions
+
+  **Step 2 — Personal Info**
+  - Full name
+  - Phone number
+  - Email address
+  - Number of passengers
+  - Any accessibility needs? (yes/no toggle)
+
+  **Step 3 — Review & Confirm**
+  - Summary of all entered details
+  - Estimated fare calculator based on distance:
+    - Under 10 km → $31.00
+    - Over 10 km → $31.00 + (extra km × $2.75)
+  - Disclaimer: "Fare is an estimate. Final price confirmed by dispatcher."
+  - Submit button → shows confirmation message:
+    "Thank you! Your request has been received. 
+     A dispatcher will call to confirm your booking."
+
+- Form validation on all fields (react-hook-form + zod)
+- Progress indicator at the top (Step 1 / 2 / 3)
+- Smooth step transitions with Framer Motion
+
+---
+
+### 4. About Us Page (/about)
+- Company story and mission
+- "13+ years of experience" highlight
+- Team values: Safety, Reliability, Professionalism
+- Service area map section (static image or embedded Google Map)
+- "Become a Driver" CTA section
+
+---
+
+### 5. FAQ Page (/faqs)
+- Accordion-style FAQ with at least 8 questions, e.g.:
+  - How do I book a ride?
+  - Do you drive my car or yours?
+  - What areas do you serve?
+  - How are fares calculated?
+  - Is there a cancellation policy?
+  - Do you operate on holidays?
+  - Can I book for a group?
+  - What if I need help getting to my door?
+
+---
+
+### 6. Contact Page (/contact)
+- Contact form: Name, Phone, Email, Message, Submit
+- Phone numbers listed by region:
+  - Main: 647-501-7433
+  - Hamilton: 289-683-4323
+  - Burlington/Oakville: 905-805-4323
+  - Mississauga: 416-752-4323
+- Hours of operation:
+  - Sun–Thu: 8:00 PM – 2:30 AM
+  - Fri–Sat: 8:00 PM – 3:00 AM
+- Google Maps embed for service area
+
+---
+
+## 🧱 Tech Stack
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Framer Motion (animations)
+- react-hook-form + zod (form validation)
+- shadcn/ui components (buttons, inputs, accordion, cards)
+- next/image for optimized images
+- next/font with Inter or Geist Sans
+
+---
+
+## 📁 Folder Structure
+/app
+  /page.tsx              → Home
+  /services/page.tsx     → Services & Pricing
+  /book/page.tsx         → Booking Form
+  /about/page.tsx        → About Us
+  /faqs/page.tsx         → FAQs
+  /contact/page.tsx      → Contact
+/components
+  /ui/                   → shadcn components
+  /layout/               → Navbar, Footer
+  /home/                 → Hero, HowItWorks, ServiceCards, Testimonials
+  /booking/              → StepOne, StepTwo, StepThree, FareCalculator
+  /shared/               → CTABanner, TrustBar, PhoneNumbers
+
+---
+
+## 🔧 Other Requirements
+- Sticky navbar with logo, nav links, and a "Book Now" button (red)
+- Mobile hamburger menu
+- Floating "Call Now" button on mobile (bottom right, red, phone icon)
+- Smooth scroll behavior
+- SEO metadata on all pages (next/head or metadata API)
+- All colors, fonts, and spacing should feel consistent and premium
+- No placeholder Lorem Ipsum — use real content based on the Ride Home DD business
