@@ -9,9 +9,6 @@ import {
   HeartPulse,
   ChevronDown,
   DollarSign,
-  MapPin,
-  Clock,
-  Users,
   Check,
 } from "lucide-react";
 import SectionHeading from "@/components/shared/SectionHeading";

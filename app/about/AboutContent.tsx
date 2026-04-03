@@ -118,7 +118,7 @@ export default function AboutContent() {
                 { icon: Users, value: "2", label: "Drivers Per Trip", color: "text-accent-red" },
                 { icon: Heart, value: "1000s", label: "Happy Customers", color: "text-emerald-400" },
                 { icon: MapPin, value: "5+", label: "Cities Served", color: "text-blue-400" },
-              ].map((stat, idx) => (
+              ].map((stat) => (
                 <div
                   key={stat.label}
                   className="glass rounded-2xl p-6 text-center"

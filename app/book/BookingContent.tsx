@@ -38,7 +38,7 @@ const formSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number"),
   email: z.string().email("Please enter a valid email"),
   passengers: z.string().min(1, "Please select number of passengers"),
-  accessibility: z.boolean().default(false),
+  accessibility: z.boolean().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
