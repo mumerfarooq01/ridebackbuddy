@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -72,7 +73,7 @@ export default function Testimonials() {
         {/* Scrubbing Text Reveal Heading */}
         <div className="mb-24 md:mb-40 max-w-6xl">
           <p ref={textRef} className="font-heading font-bold text-navy leading-[1.1] tracking-tight text-[clamp(28px,4vw,52px)]">
-            Don't just take our word for it. Listen to the thousands of Canadians who trust us with their cars and their lives.
+            Don&apos;t just take our word for it. Listen to the thousands of Canadians who trust us with their cars and their lives.
           </p>
         </div>
 
@@ -82,15 +83,17 @@ export default function Testimonials() {
           {/* Overlapping Portraits */}
           <div className="w-full lg:w-2/5 relative h-[350px] md:h-[450px] flex items-center justify-center">
             {testimonials.map((t, idx) => (
-              <img 
+              <Image
                 key={idx}
-                src={t.image} 
+                src={t.image}
                 alt={t.name}
+                width={320}
+                height={320}
                 className={`absolute w-56 h-56 md:w-80 md:h-80 rounded-[3rem] object-cover transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] shadow-2xl ${
-                  idx === current 
-                    ? "z-30 scale-100 opacity-100 filter-none" 
-                    : idx === (current - 1 + testimonials.length) % testimonials.length 
-                      ? "z-20 scale-90 -translate-x-20 md:-translate-x-32 opacity-40 grayscale blur-[2px]" 
+                  idx === current
+                    ? "z-30 scale-100 opacity-100 filter-none"
+                    : idx === (current - 1 + testimonials.length) % testimonials.length
+                      ? "z-20 scale-90 -translate-x-20 md:-translate-x-32 opacity-40 grayscale blur-[2px]"
                       : "z-10 scale-90 translate-x-20 md:translate-x-32 opacity-40 grayscale blur-[2px]"
                 }`}
               />
@@ -104,7 +107,7 @@ export default function Testimonials() {
             </div>
             
             <h3 className="font-heading font-bold text-navy leading-[1.15] tracking-tight mb-12 min-h-[180px] md:min-h-[220px] lg:min-h-[160px] text-[clamp(22px,3vw,38px)]">
-              "{testimonials[current].text}"
+              &ldquo;{testimonials[current].text}&rdquo;
             </h3>
             
             <div className="flex items-center justify-between border-t border-mist pt-10">
