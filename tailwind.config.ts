@@ -10,26 +10,35 @@ const config: Config = {
     extend: {
       colors: {
         navy: {
-          DEFAULT: "#0B1120",
-          light: "#111827",
-          lighter: "#1a2332",
+          DEFAULT: "#0B2A4A",
+          light: "#14406F",
         },
-        accent: {
-          red: "#E63946",
-          "red-dark": "#C62828",
-          "red-light": "#FF6B6B",
+        amber: {
+          DEFAULT: "#FFB627",
+          light: "#FFCB66",
         },
-        gold: {
-          DEFAULT: "#F4A261",
-          light: "#FFD19A",
-          dark: "#E07A2F",
+        mint: {
+          DEFAULT: "#16C79A",
+        },
+        ink: {
+          DEFAULT: "#1A1D23",
+        },
+        muted: {
+          DEFAULT: "#5B6473",
+        },
+        cloud: {
+          DEFAULT: "#F7F9FC",
+        },
+        mist: {
+          DEFAULT: "#E6EAF2",
         },
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "Inter", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
+        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
+        heading: ["var(--font-space-grotesk)", "Space Grotesk", "system-ui", "sans-serif"],
+        mono: ["ui-monospace", "monospace"],
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-out forwards",

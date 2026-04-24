@@ -1,123 +1,129 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import SectionHeading from "@/components/shared/SectionHeading";
+import { useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const testimonials = [
   {
     name: "Sarah M.",
     location: "Mississauga",
     rating: 5,
+    image: "https://randomuser.me/api/portraits/women/50.jpg",
     text: "Amazing service! The drivers were professional and my car was already home when I woke up. Highly recommend for any night out in the GTA.",
   },
   {
     name: "James K.",
     location: "Oakville",
     rating: 5,
+    image: "https://randomuser.me/api/portraits/men/54.jpg",
     text: "Used Ride Home for our company holiday party — they handled 15 rides seamlessly. Everyone got home safe with their cars. Will definitely use again!",
   },
   {
     name: "Maria L.",
     location: "Burlington",
     rating: 5,
+    image: "https://randomuser.me/api/portraits/women/52.jpg",
     text: "My elderly mother needed rides to multiple appointments and the pharmacy. The drivers were patient, kind, and incredibly helpful. A lifesaver!",
   },
 ];
 
 export default function Testimonials() {
+  const container = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
   const [current, setCurrent] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
+  useGSAP(() => {
+    // Scrubbing text reveal
+    if (textRef.current) {
+      const words = textRef.current.innerText.split(" ");
+      textRef.current.innerHTML = "";
+      words.forEach((word) => {
+        const span = document.createElement("span");
+        span.innerText = word + " ";
+        span.className = "opacity-10 transition-opacity duration-300";
+        textRef.current?.appendChild(span);
+      });
+
+      gsap.to(textRef.current.children, {
+        opacity: 1,
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: "top 80%",
+          end: "bottom 30%",
+          scrub: true,
+        },
+      });
+    }
+  }, { scope: container });
+
+  const handleNext = () => setCurrent((p) => (p + 1) % testimonials.length);
+  const handlePrev = () => setCurrent((p) => (p - 1 + testimonials.length) % testimonials.length);
 
   return (
-    <section className="py-20 px-4">
-      <div className="max-w-4xl mx-auto">
-        <SectionHeading
-          tag="Testimonials"
-          title="What Our Customers Say"
-          description="Don't just take our word for it."
-        />
+    <section ref={container} className="py-32 md:py-48 px-6 bg-white overflow-hidden">
+      <div className="max-w-[1400px] mx-auto">
+        
+        {/* Scrubbing Text Reveal Heading */}
+        <div className="mb-24 md:mb-40 max-w-6xl">
+          <p ref={textRef} className="font-heading font-bold text-navy leading-[1.1] tracking-tight text-[clamp(28px,4vw,52px)]">
+            Don't just take our word for it. Listen to the thousands of Canadians who trust us with their cars and their lives.
+          </p>
+        </div>
 
-        <div className="relative">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.4 }}
-              className="glass rounded-2xl p-8 md:p-12 text-center relative"
-            >
-              <Quote className="w-10 h-10 text-accent-red/30 mx-auto mb-6" />
+        {/* Elite Feedback Carousel */}
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
+          
+          {/* Overlapping Portraits */}
+          <div className="w-full lg:w-2/5 relative h-[350px] md:h-[450px] flex items-center justify-center">
+            {testimonials.map((t, idx) => (
+              <img 
+                key={idx}
+                src={t.image} 
+                alt={t.name}
+                className={`absolute w-56 h-56 md:w-80 md:h-80 rounded-[3rem] object-cover transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] shadow-2xl ${
+                  idx === current 
+                    ? "z-30 scale-100 opacity-100 filter-none" 
+                    : idx === (current - 1 + testimonials.length) % testimonials.length 
+                      ? "z-20 scale-90 -translate-x-20 md:-translate-x-32 opacity-40 grayscale blur-[2px]" 
+                      : "z-10 scale-90 translate-x-20 md:translate-x-32 opacity-40 grayscale blur-[2px]"
+                }`}
+              />
+            ))}
+          </div>
 
-              <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8 italic">
-                &ldquo;{testimonials[current].text}&rdquo;
-              </p>
-
-              <div className="flex items-center justify-center gap-1 mb-3">
-                {[...Array(testimonials[current].rating)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-gold text-gold"
-                  />
-                ))}
+          {/* Minimalist Quote */}
+          <div className="w-full lg:w-3/5">
+            <div className="flex gap-2 mb-10">
+              {[...Array(5)].map((_, i) => <Star key={i} className="w-6 h-6 md:w-8 md:h-8 fill-amber text-amber" />)}
+            </div>
+            
+            <h3 className="font-heading font-bold text-navy leading-[1.15] tracking-tight mb-12 min-h-[180px] md:min-h-[220px] lg:min-h-[160px] text-[clamp(22px,3vw,38px)]">
+              "{testimonials[current].text}"
+            </h3>
+            
+            <div className="flex items-center justify-between border-t border-mist pt-10">
+              <div>
+                <p className="font-heading font-bold text-navy text-xl md:text-2xl mb-1">{testimonials[current].name}</p>
+                <p className="text-base text-muted uppercase tracking-widest">{testimonials[current].location}</p>
               </div>
 
-              <p className="text-white font-semibold">
-                {testimonials[current].name}
-              </p>
-              <p className="text-gray-500 text-sm">
-                {testimonials[current].location}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Controls */}
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <button
-              onClick={() =>
-                setCurrent(
-                  (prev) => (prev - 1 + testimonials.length) % testimonials.length
-                )
-              }
-              className="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-2">
-              {testimonials.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrent(idx)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    idx === current
-                      ? "w-6 bg-accent-red"
-                      : "bg-white/20 hover:bg-white/40"
-                  }`}
-                  aria-label={`Go to testimonial ${idx + 1}`}
-                />
-              ))}
+              <div className="flex gap-4">
+                <button onClick={handlePrev} className="w-16 h-16 rounded-full border border-mist flex items-center justify-center text-navy hover:bg-mist transition-colors group">
+                  <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
+                </button>
+                <button onClick={handleNext} className="w-16 h-16 rounded-full bg-navy text-white flex items-center justify-center hover:bg-navy-light transition-colors group shadow-xl shadow-navy/20">
+                  <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
-
-            <button
-              onClick={() =>
-                setCurrent((prev) => (prev + 1) % testimonials.length)
-              }
-              className="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
+
         </div>
       </div>
     </section>

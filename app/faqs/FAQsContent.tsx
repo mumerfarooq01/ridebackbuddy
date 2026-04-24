@@ -65,20 +65,20 @@ export default function FAQsContent() {
     <>
       {/* Hero */}
       <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(244,162,97,0.1),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,182,39,0.1),transparent_60%)]" />
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block text-xs font-semibold uppercase tracking-widest text-gold mb-3">
+            <span className="inline-block px-4 py-1 rounded-full bg-mist text-xs font-semibold uppercase tracking-widest text-navy mb-3">
               Got Questions?
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
               Frequently Asked Questions
             </h1>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-muted max-w-2xl mx-auto">
               Everything you need to know about our designated driver service.
             </p>
           </motion.div>
@@ -95,20 +95,20 @@ export default function FAQsContent() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.05, duration: 0.4 }}
-              className="glass rounded-xl overflow-hidden"
+              className="bg-white border border-mist shadow-sm rounded-xl overflow-hidden"
             >
               <button
                 onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"
+                className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-mist/50 transition-colors"
               >
-                <div className="w-8 h-8 rounded-lg bg-accent-red/10 flex items-center justify-center flex-shrink-0">
-                  <HelpCircle className="w-4 h-4 text-accent-red" />
+                <div className="w-8 h-8 rounded-lg bg-amber/10 flex items-center justify-center flex-shrink-0">
+                  <HelpCircle className="w-4 h-4 text-amber" />
                 </div>
-                <span className="text-white font-medium flex-1 pr-4">
+                <span className="text-navy font-medium flex-1 pr-4">
                   {faq.question}
                 </span>
                 <ChevronDown
-                  className={`w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0 ${
+                  className={`w-5 h-5 text-muted transition-transform duration-300 flex-shrink-0 ${
                     openIdx === idx ? "rotate-180" : ""
                   }`}
                 />
@@ -120,7 +120,7 @@ export default function FAQsContent() {
                   transition={{ duration: 0.3 }}
                   className="px-6 pb-5 pl-[72px]"
                 >
-                  <p className="text-gray-400 leading-relaxed">{faq.answer}</p>
+                  <p className="text-muted leading-relaxed">{faq.answer}</p>
                 </motion.div>
               )}
             </motion.div>

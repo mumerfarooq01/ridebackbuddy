@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #0B1120;
-  --foreground: #f1f1f1;
+  --background: #F7F9FC;
+  --foreground: #1A1D23;
 }
 
 * {
@@ -20,8 +20,14 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  line-height: 1.5;
   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 /* Custom scrollbar */
@@ -30,45 +36,45 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B1120;
+  background: #F7F9FC;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1a2332;
+  background: #E6EAF2;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #E63946;
+  background: #5B6473;
 }
 
 /* Glass effect utility */
 @layer utilities {
   .glass {
-    background: rgba(17, 24, 39, 0.7);
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(230, 234, 242, 0.5);
   }
 
   .glass-light {
-    background: rgba(17, 24, 39, 0.4);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(230, 234, 242, 0.3);
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #E63946, #F4A261);
+    background: linear-gradient(135deg, #0B2A4A, #14406F);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .bg-gradient-brand {
-    background: linear-gradient(135deg, #E63946 0%, #C62828 100%);
+    background: linear-gradient(135deg, #0B2A4A 0%, #14406F 100%);
   }
 
   .bg-gradient-gold {
-    background: linear-gradient(135deg, #F4A261 0%, #E07A2F 100%);
+    background: linear-gradient(135deg, #FFB627 0%, #FFCB66 100%);
   }
 
   .text-balance {
@@ -83,7 +89,7 @@ body {
   }
 
   ::selection {
-    background: rgba(230, 57, 70, 0.3);
-    color: #fff;
+    background: rgba(255, 182, 39, 0.3);
+    color: #1A1D23;
   }
 }

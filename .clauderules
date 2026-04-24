@@ -1,0 +1,37 @@
+# RideBack Buddy AI Agent Instructions
+
+You are an AI assistant working on the RideBack Buddy project. When generating code, writing copy, or designing UI components, you MUST adhere to the following brand guidelines extracted from `brand-guide.html`.
+
+## 1. Brand Positioning & Tone
+- **Positioning**: A two-driver service for Canadians that brings the user AND their car safely home.
+- **Voice**: Friendly ("a friend with keys in hand"), calm, dependable, Canadian-polite. Safety-first, but NEVER preachy.
+- **DO NOT Use**: Corporate jargon ("disruptive platform"), preachy terms ("Anti-DUI solution"), or luxury misrepresentations ("Chauffeur service").
+
+## 2. Color System (Tailwind CSS)
+Always use the established Tailwind classes rather than raw hex codes:
+- `navy` (#0B2A4A) - Primary brand color, trust, headings.
+- `navy-light` (#14406F) - Hover states, gradients.
+- `amber` (#FFB627) - Primary accents, calls to action, warmth.
+- `mint` (#16C79A) - Success states, "go" actions.
+- `cloud` (#F7F9FC) - Primary light backgrounds.
+- `ink` (#1A1D23) - Primary body text.
+- `muted` (#5B6473) - Secondary text, descriptions.
+- `mist` (#E6EAF2) - Borders, dividers, subtle backgrounds.
+
+*Design Note: The theme is a clean, light theme. Avoid dark backgrounds except for specific contrast areas like footers or primary buttons.*
+
+## 3. Typography
+- **Headings**: Use `font-sans` (configured to Space Grotesk in Tailwind for headings). Headings should have tight tracking (`tracking-tight` or `-0.02em`).
+- **Body**: Use `font-sans` (configured to Inter for body). Ensure good readability with `leading-relaxed` (1.5).
+
+## 4. UI/UX Principles
+- Components should feel premium but accessible.
+- Use `rounded-xl` or `rounded-2xl` for cards and large elements.
+- Use `shadow-sm` for clean elevations.
+- Active interactive elements should use `bg-amber text-navy` or `bg-navy text-white`.
+- Avoid generic UI text; use brand-aligned copy (e.g., "Book a Ride", "Home safely. Car and all.").
+
+## 5. Logo Usage
+- `logo-primary.svg` / `logo.png`: Use on light backgrounds (`bg-cloud`, `bg-white`).
+- `logo-dark.svg` / `logo-light.png`: Use on dark backgrounds (`bg-navy`).
+- `logo-mark.svg`: Use for avatars, favicons, or tight spaces.

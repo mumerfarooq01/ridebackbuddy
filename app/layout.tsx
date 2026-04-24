@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingCallButton from "@/components/shared/FloatingCallButton";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-inter",
+  display: "swap",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-space-grotesk",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,6 +25,17 @@ export const metadata: Metadata = {
     "Ontario's trusted designated driver service since 2011. Serving Mississauga, Oakville, Burlington, Hamilton & GTA. Book your safe ride home tonight.",
   keywords:
     "designated driver, ride home, safe ride, GTA driver, Mississauga driver, Oakville, Burlington, Hamilton",
+  icons: {
+    icon: [
+      { url: "/assets/images/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/assets/images/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/assets/images/favicon.ico", sizes: "any" },
+    ],
+    apple: { url: "/assets/images/apple-touch-icon.png" },
+    other: [
+      { rel: "manifest", url: "/assets/images/site.webmanifest" },
+    ],
+  },
   openGraph: {
     title: "Ride Home Designated Drivers",
     description:
@@ -36,9 +50,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-navy text-white`}
+        className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-cloud text-ink`}
       >
         <Navbar />
         <main className="min-h-screen">{children}</main>

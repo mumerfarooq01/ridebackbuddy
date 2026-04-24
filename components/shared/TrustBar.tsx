@@ -1,48 +1,74 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Award, Users, MapPin } from "lucide-react";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const stats = [
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const trustItems = [
   {
-    icon: Award,
-    value: "13+",
-    label: "Years Experience",
+    icon: "🧾",
+    title: "Vetted drivers",
+    description: "Criminal record check. 5+ yrs licensed. Annual training.",
   },
   {
-    icon: Users,
-    value: "2",
-    label: "Drivers Per Trip",
+    icon: "🛡️",
+    title: "Commercial insurance",
+    description: "Hired & non-owned auto policy sits above your own.",
   },
   {
-    icon: MapPin,
-    value: "GTA",
-    label: "& Surrounding Areas",
+    icon: "📹",
+    title: "Dashcam every ride",
+    description: "Disclosed at booking. Footage retained per PIPEDA.",
+  },
+  {
+    icon: "📷",
+    title: "Vehicle photo check",
+    description: "Before and after — so there are no surprises.",
   },
 ];
 
 export default function TrustBar() {
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".trust-card", {
+      y: 50,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top 75%",
+      },
+    });
+  }, { scope: container });
+
   return (
-    <section className="py-16 border-y border-white/5">
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {stats.map((stat, idx) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.15, duration: 0.5 }}
-              className="flex items-center justify-center gap-4"
+    <section id="safety" ref={container} className="py-20 md:py-28 bg-cloud">
+      <div className="max-w-[1180px] mx-auto px-6">
+        <span className="text-amber font-heading font-semibold tracking-[2px] text-sm uppercase">
+          Safety &amp; trust
+        </span>
+        <h2 className="font-heading font-bold text-navy mt-2 mb-10 text-[clamp(26px,3vw,38px)] leading-[1.15] tracking-tight">
+          Tight ops so you don&rsquo;t have to worry.
+        </h2>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {trustItems.map((item) => (
+            <div
+              key={item.title}
+              className="trust-card bg-white border border-mist rounded-[18px] p-6 text-center"
             >
-              <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center">
-                <stat.icon className="w-6 h-6 text-gold" />
+              <div className="w-11 h-11 rounded-full bg-[#FFE7B5] flex items-center justify-center mx-auto mb-3 text-xl">
+                {item.icon}
               </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-                <p className="text-sm text-gray-400">{stat.label}</p>
-              </div>
-            </motion.div>
+              <h4 className="font-heading font-semibold text-navy mb-1.5">{item.title}</h4>
+              <p className="text-muted text-sm leading-relaxed">{item.description}</p>
+            </div>
           ))}
         </div>
       </div>

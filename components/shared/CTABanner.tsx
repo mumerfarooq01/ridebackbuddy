@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 interface CTABannerProps {
   title?: string;
@@ -11,35 +10,30 @@ interface CTABannerProps {
 }
 
 export default function CTABanner({
-  title = "Don't Risk It. Book Your Ride Tonight.",
-  subtitle = "Two professional drivers per trip — one for you, one for your car.",
-  buttonText = "Book a Ride Now",
+  title = "Ready when you are.",
+  subtitle = "Open the app, or book from any browser. Your car is about to have a very safe night.",
+  buttonText = "Book your RideBack →",
   buttonHref = "/book",
 }: CTABannerProps) {
   return (
-    <section className="relative py-20 overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-accent-red/20 via-navy to-accent-red/20" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(230,57,70,0.15),transparent_70%)]" />
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="relative z-10 max-w-4xl mx-auto text-center px-4"
-      >
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+    <section
+      className="py-16 text-center"
+      style={{ background: "linear-gradient(135deg, #FFB627, #FFCB66)" }}
+    >
+      <div className="max-w-[1180px] mx-auto px-6">
+        <h2 className="font-heading font-bold text-navy text-[clamp(26px,3vw,38px)] tracking-tight mb-3">
           {title}
         </h2>
-        <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">{subtitle}</p>
+        <p className="text-navy/70 max-w-[560px] mx-auto mb-7 text-base leading-relaxed">
+          {subtitle}
+        </p>
         <Link
           href={buttonHref}
-          className="inline-flex items-center gap-2 bg-gradient-brand hover:opacity-90 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 hover:scale-105 shadow-xl shadow-accent-red/25"
+          className="inline-flex items-center gap-2 bg-navy hover:bg-navy-light text-white font-heading font-semibold text-base px-6 py-3.5 rounded-xl transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
         >
           {buttonText}
         </Link>
-      </motion.div>
+      </div>
     </section>
   );
 }

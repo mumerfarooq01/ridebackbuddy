@@ -1,77 +1,93 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Phone, PartyPopper, Car, HeartPulse } from "lucide-react";
-import SectionHeading from "@/components/shared/SectionHeading";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const services = [
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const values = [
   {
-    icon: Car,
-    title: "Standard Designated Driver",
+    icon: "🚗",
+    title: "Your car comes home",
     description:
-      "Our core service — a professional driver takes you and your car home safely. Two drivers per trip ensures seamless service.",
-    color: "from-accent-red/20 to-accent-red/5",
-    iconColor: "text-accent-red",
+      "No taxi back in the morning. No parking ticket at 7 am. No awkward rescue favour from your brother-in-law.",
   },
   {
-    icon: PartyPopper,
-    title: "Special Events & Weddings",
+    icon: "🛡️",
+    title: "Fully insured, fully vetted",
     description:
-      "Christmas parties, corporate events, weddings, golf tournaments — we handle the driving so your guests enjoy the celebration.",
-    color: "from-gold/20 to-gold/5",
-    iconColor: "text-gold",
+      "Commercial hired-auto insurance above your policy. Every driver background-checked, trained, and dashcam-equipped.",
   },
   {
-    icon: Phone,
-    title: "Vehicle Drop Service",
+    icon: "💳",
+    title: "Flat fare, no surge",
     description:
-      "Need your car at the mechanic, airport, or detailer? We'll pick up and drop off your vehicle wherever it needs to go.",
-    color: "from-blue-500/20 to-blue-500/5",
-    iconColor: "text-blue-400",
+      "You see the price before you book. No demand pricing at midnight on New Year's Eve. Ever.",
   },
   {
-    icon: HeartPulse,
-    title: "Medical & Senior Service",
+    icon: "👥",
+    title: "Your car, your driver",
     description:
-      "Post-procedure transportation, multi-stop errands, and mobility assistance. Door-to-door care for those who need it most.",
-    color: "from-emerald-500/20 to-emerald-500/5",
-    iconColor: "text-emerald-400",
+      "Our driver comes to you and drives your own vehicle home. You're a passenger in your own car — comfortable and in control.",
+  },
+  {
+    icon: "🇨🇦",
+    title: "Built for Canada",
+    description:
+      "Winter tires, block heaters, Interac. We know that Friday night at −22°C is when you need us most.",
+  },
+  {
+    icon: "🏢",
+    title: "Corporate-friendly",
+    description:
+      "One monthly invoice. Pre-authorized limits for holiday parties and client dinners. HR dashboard included.",
   },
 ];
 
 export default function ServiceCards() {
-  return (
-    <section className="py-20 px-4">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeading
-          tag="Our Services"
-          title="Safe Rides for Every Occasion"
-          description="Whether it's a night out or a medical appointment, we've got you covered with professional designated drivers."
-        />
+  const container = useRef<HTMLElement>(null);
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {services.map((service, idx) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className="group relative glass rounded-2xl p-8 hover:bg-white/[0.06] transition-all duration-300 cursor-pointer"
+  useGSAP(() => {
+    gsap.from(".value-card", {
+      y: 60,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top 75%",
+      },
+    });
+  }, { scope: container });
+
+  return (
+    <section ref={container} className="py-20 md:py-28 bg-cloud">
+      <div className="max-w-[1180px] mx-auto px-6">
+        <span className="text-amber font-heading font-semibold tracking-[2px] text-sm uppercase">
+          Why RideBack Buddy
+        </span>
+        <h2 className="font-heading font-bold text-navy mt-2 mb-3 text-[clamp(26px,3vw,38px)] leading-[1.15] tracking-tight">
+          The only ride home that brings your car too.
+        </h2>
+        <p className="text-muted max-w-[620px] mb-10">
+          Rideshare leaves the car at the restaurant. Cabs do the same. We don&rsquo;t.
+        </p>
+
+        <div className="grid md:grid-cols-3 gap-5">
+          {values.map((v) => (
+            <div
+              key={v.title}
+              className="value-card bg-white rounded-[18px] p-7"
             >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${service.color} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-              />
-              <div className="relative z-10">
-                <div className={`w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-5 ${service.iconColor}`}>
-                  <service.icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-gray-400 leading-relaxed">{service.description}</p>
+              <div className="w-11 h-11 rounded-xl bg-navy flex items-center justify-center text-xl mb-4">
+                {v.icon}
               </div>
-            </motion.div>
+              <h3 className="font-heading font-semibold text-navy text-[20px] mb-2">{v.title}</h3>
+              <p className="text-muted text-[15px] leading-relaxed">{v.description}</p>
+            </div>
           ))}
         </div>
       </div>

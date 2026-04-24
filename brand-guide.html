@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>RideBack Buddy — Brand Guide</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B2A4A; --navy-2:#14406F;
+    --amber:#FFB627; --amber-2:#FFCB66;
+    --mint:#16C79A;
+    --ink:#1A1D23; --muted:#5B6473;
+    --cloud:#F7F9FC; --mist:#E6EAF2; --white:#FFFFFF;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--cloud);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;color:var(--navy);margin:0 0 12px;letter-spacing:-0.02em}
+  h1{font-size:40px}
+  h2{font-size:22px;margin-top:24px}
+  h3{font-size:14px;text-transform:uppercase;letter-spacing:2px;color:var(--muted)}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 28px}
+  .hero{background:var(--white);border-radius:20px;padding:40px;box-shadow:0 8px 30px rgba(11,42,74,.06);margin-bottom:24px}
+  .hero img{max-width:480px;width:100%}
+  .grid{display:grid;gap:16px}
+  .grid.c3{grid-template-columns:repeat(3,1fr)}
+  .grid.c4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--white);border-radius:16px;padding:24px;box-shadow:0 4px 18px rgba(11,42,74,.05)}
+  .swatch{border-radius:12px;height:120px;display:flex;align-items:flex-end;padding:14px;color:#fff;font-weight:600;font-family:'Space Grotesk',sans-serif}
+  .swatch.light{color:var(--ink)}
+  .meta{font-size:12px;color:var(--muted);margin-top:8px;font-family:ui-monospace,monospace}
+  .tag{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--mist);color:var(--navy);font-size:12px;font-weight:600;letter-spacing:.5px}
+  .voice li{margin:8px 0}
+  .do,.dont{padding:18px;border-radius:14px}
+  .do{background:#E8F8F2;border:1px solid #A9E6CE}
+  .dont{background:#FDEDEC;border:1px solid #F5B7B1}
+  .mono{font-family:ui-monospace,monospace;font-size:13px;color:var(--muted)}
+  .sample{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;color:var(--navy);letter-spacing:-.02em}
+  .sample.body{font-family:'Inter',sans-serif;font-weight:400;font-size:18px;color:var(--ink);letter-spacing:0}
+  @media (max-width:720px){.grid.c3,.grid.c4{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <span class="tag">Brand Guide v1</span>
+    <h1 style="margin-top:8px">RideBack Buddy</h1>
+    <p style="color:var(--muted);max-width:680px;font-size:18px">The Canadian designated-driver service that gets <strong>you and your car</strong> home safely. A warm, dependable brand built on trust, care, and a friend-who-shows-up feeling.</p>
+    <div style="margin-top:24px"><img src="logo-primary.svg" alt="RideBack Buddy logo"/></div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Positioning Statement</h3>
+    <p style="font-size:18px;color:var(--navy);margin:0"><strong>For Canadians who went out and can&rsquo;t drive back</strong>, RideBack Buddy is a two&#8209;driver service that brings you <em>and your own car</em> safely home &mdash; so your night ends in your driveway, not a parking lot.</p>
+  </div>
+
+  <h2>Taglines</h2>
+  <div class="grid c3" style="margin-bottom:24px">
+    <div class="card"><h3>Primary</h3><div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;color:var(--navy)">Home safely. Car and all.</div></div>
+    <div class="card"><h3>Friendly</h3><div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;color:var(--navy)">Your car. Your keys. Your couch.</div></div>
+    <div class="card"><h3>Functional</h3><div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;color:var(--navy)">Two drivers. One safe ride home.</div></div>
+  </div>
+
+  <h2>Color System</h2>
+  <p class="mono">60% Midnight Navy &middot; 25% Cloud / white &middot; 10% Amber Glow &middot; 5% Mint Trust</p>
+  <div class="grid c4" style="margin-bottom:24px">
+    <div><div class="swatch" style="background:#0B2A4A">Midnight Navy</div><div class="meta">#0B2A4A &middot; primary, trust</div></div>
+    <div><div class="swatch" style="background:#FFB627">Amber Glow</div><div class="meta">#FFB627 &middot; accent, warmth, headlights</div></div>
+    <div><div class="swatch" style="background:#16C79A">Mint Trust</div><div class="meta">#16C79A &middot; success, go</div></div>
+    <div><div class="swatch light" style="background:#F7F9FC;border:1px solid var(--mist)">Cloud</div><div class="meta">#F7F9FC &middot; backgrounds</div></div>
+    <div><div class="swatch" style="background:#1A1D23">Ink</div><div class="meta">#1A1D23 &middot; body text</div></div>
+    <div><div class="swatch" style="background:#5B6473">Muted</div><div class="meta">#5B6473 &middot; secondary text</div></div>
+    <div><div class="swatch light" style="background:#E6EAF2">Mist</div><div class="meta">#E6EAF2 &middot; borders, dividers</div></div>
+    <div><div class="swatch" style="background:#14406F">Deep Indigo</div><div class="meta">#14406F &middot; navy hover/gradient</div></div>
+  </div>
+
+  <h2>Typography</h2>
+  <div class="grid c3" style="margin-bottom:24px">
+    <div class="card"><h3>Headings</h3><div class="sample">Space Grotesk</div><div class="meta">Weights 500/600/700 &middot; -0.02em tracking</div></div>
+    <div class="card"><h3>Body</h3><div class="sample body">Inter keeps things clear and humane.</div><div class="meta">Weights 400/500/600 &middot; 1.5 line-height</div></div>
+    <div class="card"><h3>Fallback</h3><div class="sample body" style="font-family:system-ui">System UI (Arial, Helvetica).</div><div class="meta">For emails / Word / Excel</div></div>
+  </div>
+
+  <h2>Logo Variants</h2>
+  <div class="grid c3" style="margin-bottom:24px">
+    <div class="card"><h3>Primary</h3><img src="logo-primary.svg" style="max-width:100%"/></div>
+    <div class="card" style="background:var(--navy)"><h3 style="color:#fff">Reverse</h3><img src="logo-dark.svg" style="max-width:100%"/></div>
+    <div class="card"><h3>Mark</h3><img src="logo-mark.svg" style="max-width:120px"/></div>
+  </div>
+
+  <h2>Voice &amp; Tone</h2>
+  <div class="grid c3" style="margin-bottom:24px">
+    <div class="card"><h3>We sound like</h3><ul class="voice"><li>A friend with keys in hand</li><li>Calm, dependable, a little playful</li><li>Canadian-polite, not corporate</li><li>Safety&#8209;first without being preachy</li></ul></div>
+    <div class="card do"><h3 style="color:#0E5A3D">Do say</h3><ul class="voice"><li>&ldquo;We&rsquo;ll drive you home in your car.&rdquo;</li><li>&ldquo;Two drivers, one simple fare.&rdquo;</li><li>&ldquo;Park it safe &mdash; in your driveway.&rdquo;</li></ul></div>
+    <div class="card dont"><h3 style="color:#922B21">Don&rsquo;t say</h3><ul class="voice"><li>&ldquo;Anti&#8209;DUI solution&rdquo; (preachy)</li><li>&ldquo;Chauffeur service&rdquo; (wrong tier)</li><li>&ldquo;Disruptive platform&rdquo; (corporate)</li></ul></div>
+  </div>
+
+  <p class="mono" style="text-align:center;margin-top:32px">&copy; RideBack Buddy &middot; Canada &middot; Brand Guide v1</p>
+</div>
+</body>
+</html>

@@ -1,72 +1,81 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { CalendarCheck, Wine, Home } from "lucide-react";
-import SectionHeading from "@/components/shared/SectionHeading";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const steps = [
   {
-    icon: CalendarCheck,
-    step: "01",
-    title: "Book Your Ride",
+    n: "1",
+    title: "Open the app",
     description:
-      "Reserve online or call us. Give us your pickup location, time, and destination.",
+      "Tell us where you are and which vehicle is yours. We'll quote a flat fare in seconds.",
   },
   {
-    icon: Wine,
-    step: "02",
-    title: "Enjoy Your Evening",
+    n: "2",
+    title: "We arrive in 10 minutes",
     description:
-      "Relax and have a great time. We'll be there when you're ready to leave.",
+      "Your designated driver arrives at your location, ready to take the wheel of your own vehicle.",
   },
   {
-    icon: Home,
-    step: "03",
-    title: "Get Home Safe",
+    n: "3",
+    title: "Ride home in your car",
     description:
-      "Our driver takes you AND your car home. No need for a taxi or a tow.",
+      "Sit back as a passenger in your own vehicle. Your driver takes you safely home — every traffic law followed.",
+  },
+  {
+    n: "4",
+    title: "Wake up at home",
+    description:
+      "Car parked in your driveway. Keys on the counter. Night handled.",
   },
 ];
 
 export default function HowItWorks() {
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.utils.toArray<Element>(".step-card").forEach((card) => {
+      gsap.from(card, {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 88%",
+          once: true,
+        },
+      });
+    });
+  }, { scope: container });
+
   return (
-    <section className="py-20 px-4 bg-navy-light/50">
-      <div className="max-w-5xl mx-auto">
-        <SectionHeading
-          tag="How It Works"
-          title="Three Simple Steps"
-          description="Getting home safely has never been easier."
-        />
+    <section id="how" ref={container} className="py-20 md:py-28 bg-white">
+      <div className="max-w-[1180px] mx-auto px-6">
+        <span className="text-amber font-heading font-semibold tracking-[2px] text-sm uppercase">
+          How it works
+        </span>
+        <h2 className="font-heading font-bold text-navy mt-2 mb-3 text-[clamp(26px,3vw,38px)] leading-[1.15] tracking-tight">
+          From &ldquo;I shouldn&rsquo;t drive&rdquo; to your driveway, in four simple steps.
+        </h2>
+        <p className="text-muted max-w-[620px] mb-10">
+          No cabs, no morning-after car retrieval, no logistics at 1&nbsp;am. Just two people who show up.
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((item, idx) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.15, duration: 0.5 }}
-              className="relative text-center"
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {steps.map((step) => (
+            <div
+              key={step.n}
+              className="step-card bg-white border border-mist rounded-[18px] p-6 relative hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(11,42,74,.10)] transition-all duration-200"
             >
-              {/* Connector line */}
-              {idx < steps.length - 1 && (
-                <div className="hidden md:block absolute top-10 left-[60%] w-[80%] h-px bg-gradient-to-r from-white/10 to-transparent" />
-              )}
-
-              <div className="relative inline-flex items-center justify-center mb-6">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-accent-red/20 to-transparent flex items-center justify-center">
-                  <item.icon className="w-8 h-8 text-accent-red" />
-                </div>
-                <span className="absolute -top-2 -right-2 w-7 h-7 rounded-lg bg-gold text-navy text-xs font-bold flex items-center justify-center">
-                  {item.step}
-                </span>
-              </div>
-
-              <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">
-                {item.description}
-              </p>
-            </motion.div>
+              <div className="font-heading text-[40px] font-bold text-amber leading-none">{step.n}</div>
+              <h3 className="font-heading font-semibold text-navy text-[20px] mt-2 mb-3">{step.title}</h3>
+              <p className="text-muted text-[15px] leading-relaxed">{step.description}</p>
+            </div>
           ))}
         </div>
       </div>

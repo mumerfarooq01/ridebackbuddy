@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RideBack Buddy — Home safely. Car and all.</title>
+<meta name="description" content="Canadian designated-driver service. Two drivers get you AND your own car home safely. Book in the app or online in under a minute."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B2A4A; --navy-2:#14406F; --navy-3:#1C5390;
+    --amber:#FFB627; --amber-2:#FFCB66; --amber-3:#FFE7B5;
+    --mint:#16C79A; --mint-2:#5FDDB7;
+    --ink:#1A1D23; --muted:#5B6473; --muted-2:#8A95A5;
+    --cloud:#F7F9FC; --mist:#E6EAF2; --white:#FFFFFF;
+    --radius:18px; --radius-sm:12px;
+    --shadow-sm:0 4px 14px rgba(11,42,74,.06);
+    --shadow:0 12px 32px rgba(11,42,74,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Inter',system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:var(--white);line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;color:var(--navy);letter-spacing:-0.02em;margin:0 0 12px}
+  h1{font-size:clamp(36px,5vw,60px);line-height:1.05;font-weight:700}
+  h2{font-size:clamp(26px,3vw,38px);font-weight:700;line-height:1.15}
+  h3{font-size:20px;font-weight:600}
+  p{margin:0 0 12px}
+  a{color:var(--navy-3);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--amber-3);color:var(--navy);padding:6px 14px;border-radius:999px;font-weight:600;font-size:13px;letter-spacing:.3px}
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(255,182,39,.25)}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:transform .12s,box-shadow .15s,background .2s;text-decoration:none}
+  .btn.primary{background:var(--amber);color:var(--navy)}
+  .btn.primary:hover{background:var(--amber-2);transform:translateY(-1px);box-shadow:var(--shadow-sm);text-decoration:none}
+  .btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--mist)}
+  .btn.ghost:hover{border-color:var(--navy);text-decoration:none}
+  .btn.dark{background:var(--navy);color:#fff}
+  .btn.dark:hover{background:var(--navy-2);text-decoration:none;transform:translateY(-1px)}
+
+  /* Nav */
+  .nav{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--mist)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+  .nav a.navlink{color:var(--muted);font-weight:500;font-size:15px;margin:0 14px}
+  .nav a.navlink:hover{color:var(--navy);text-decoration:none}
+  .nav .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;color:var(--navy);font-size:20px;text-decoration:none}
+  .nav .brand svg{width:36px;height:36px}
+  .nav .links{display:flex;align-items:center}
+  @media (max-width:820px){.nav .links a.navlink{display:none}}
+
+  /* Hero */
+  .hero{background:radial-gradient(1200px 600px at 10% -10%,rgba(255,182,39,.15),transparent 60%),
+        linear-gradient(180deg,#0B2A4A 0%,#14406F 100%);color:#fff;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:auto 0 -1px 0;height:80px;background:linear-gradient(180deg,transparent,var(--cloud))}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;padding:80px 0 120px;align-items:center}
+  @media (max-width:920px){.hero-grid{grid-template-columns:1fr;gap:32px;padding:56px 0 96px}}
+  .hero h1{color:#fff}
+  .hero .sub{color:#CADCFC;font-size:18px;max-width:560px;margin:16px 0 28px}
+  .hero .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .hero .stats{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap}
+  .hero .stats .s{color:#CADCFC;font-size:13px}
+  .hero .stats .s b{display:block;font-family:'Space Grotesk';color:#fff;font-size:24px;font-weight:700}
+  .hero-art{position:relative}
+  .hero-art .phone{background:#fff;border-radius:28px;box-shadow:0 40px 80px rgba(0,0,0,.35);padding:16px;width:320px;margin-left:auto}
+  .hero-art .phone .screen{border-radius:18px;background:var(--cloud);padding:18px;color:var(--ink)}
+  .hero-art .map{background:linear-gradient(135deg,#cfe0f7,#e9f2ff);border-radius:14px;height:160px;position:relative;overflow:hidden}
+  .hero-art .map .pin{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 6px rgba(255,182,39,.3);top:28px;left:38px}
+  .hero-art .map .pin.home{background:var(--mint);box-shadow:0 0 0 6px rgba(22,199,154,.3);top:108px;left:230px}
+  .hero-art .map svg{position:absolute;inset:0}
+  .hero-art .row{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .hero-art .row .av{width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Space Grotesk'}
+  .hero-art .fare{display:flex;align-items:center;justify-content:space-between;background:var(--navy);color:#fff;border-radius:12px;padding:12px 14px;margin-top:14px;font-family:'Space Grotesk';font-weight:600}
+
+  /* Sections */
+  section{padding:80px 0}
+  section h2 + p{color:var(--muted);max-width:620px}
+  .eyebrow{color:var(--amber);font-weight:600;letter-spacing:2px;font-size:13px;text-transform:uppercase;font-family:'Space Grotesk'}
+
+  /* How it works */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px}
+  @media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.steps{grid-template-columns:1fr}}
+  .step{background:#fff;border:1px solid var(--mist);border-radius:var(--radius);padding:24px;position:relative;transition:transform .15s,box-shadow .15s}
+  .step:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .step .n{font-family:'Space Grotesk';font-size:40px;font-weight:700;color:var(--amber);line-height:1}
+  .step h3{margin-top:8px}
+  .step p{color:var(--muted);font-size:15px}
+
+  /* Value */
+  .values{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:820px){.values{grid-template-columns:1fr}}
+  .value{background:var(--cloud);border-radius:var(--radius);padding:26px}
+  .value .ico{width:46px;height:46px;border-radius:12px;background:var(--navy);color:var(--amber);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .value h3{margin:0 0 6px}
+  .value p{color:var(--muted);margin:0}
+
+  /* Pricing */
+  .pricing{background:var(--cloud)}
+  .prices{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+  @media (max-width:820px){.prices{grid-template-columns:1fr}}
+  .price{background:#fff;border:1px solid var(--mist);border-radius:var(--radius);padding:26px;position:relative}
+  .price.feature{border-color:var(--amber);box-shadow:0 10px 28px rgba(255,182,39,.25)}
+  .price .tag{position:absolute;top:-12px;right:18px;background:var(--amber);color:var(--navy);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;font-family:'Space Grotesk'}
+  .price h3{color:var(--muted);font-size:14px;text-transform:uppercase;letter-spacing:2px;font-weight:600}
+  .price .big{font-family:'Space Grotesk';color:var(--navy);font-size:44px;font-weight:700;margin:4px 0}
+  .price .big small{font-size:16px;color:var(--muted);font-weight:500}
+  .price ul{padding:0;list-style:none;margin:16px 0 0}
+  .price li{padding:8px 0;border-top:1px solid var(--mist);color:var(--ink);font-size:15px;display:flex;gap:10px;align-items:flex-start}
+  .price li:first-child{border-top:0}
+  .price li::before{content:"✓";color:var(--mint);font-weight:700;flex-shrink:0}
+
+  /* Booking form */
+  .booking{background:#0B2A4A;color:#fff;position:relative;overflow:hidden}
+  .booking::before{content:"";position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,182,39,.22),transparent 70%);top:-180px;right:-160px}
+  .booking h2{color:#fff}
+  .booking-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
+  @media (max-width:920px){.booking-grid{grid-template-columns:1fr}}
+  .booking .lead{color:#CADCFC;max-width:420px}
+  .form-card{background:#fff;color:var(--ink);border-radius:var(--radius);padding:28px;box-shadow:0 30px 60px rgba(0,0,0,.3);position:relative;z-index:2}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form-grid .full{grid-column:span 2}
+  label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:0 0 6px}
+  input,select,textarea{width:100%;font:inherit;color:var(--ink);padding:12px 14px;border:1.5px solid var(--mist);border-radius:10px;background:#fff;outline:none;transition:border .15s,box-shadow .15s}
+  input:focus,select:focus,textarea:focus{border-color:var(--navy);box-shadow:0 0 0 4px rgba(11,42,74,.08)}
+  .fare-box{background:var(--cloud);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+  .fare-box .label{color:var(--muted);font-size:13px}
+  .fare-box .amount{font-family:'Space Grotesk';font-weight:700;color:var(--navy);font-size:28px}
+  .confirm{display:none;text-align:center;padding:8px 0}
+  .confirm .check{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;background:var(--mint);color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px}
+  .booking-id{font-family:'Space Grotesk';font-weight:700;color:var(--navy);letter-spacing:2px;font-size:22px}
+
+  /* Trust */
+  .trust{background:var(--cloud)}
+  .trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+  @media (max-width:820px){.trust-grid{grid-template-columns:1fr 1fr}}
+  .trust .t{background:#fff;border-radius:var(--radius);padding:22px;text-align:center;border:1px solid var(--mist)}
+  .trust .t .ico{width:44px;height:44px;margin:0 auto 10px;border-radius:50%;background:var(--amber-3);color:var(--navy);display:flex;align-items:center;justify-content:center}
+  .trust .t h4{margin:0 0 4px;font-family:'Space Grotesk';color:var(--navy)}
+  .trust .t p{color:var(--muted);font-size:14px;margin:0}
+
+  /* FAQ */
+  details{background:#fff;border:1px solid var(--mist);border-radius:12px;padding:18px 20px;margin:10px 0;cursor:pointer;transition:border .15s}
+  details[open]{border-color:var(--navy)}
+  details summary{list-style:none;font-weight:600;color:var(--navy);font-family:'Space Grotesk';font-size:17px;display:flex;justify-content:space-between;align-items:center}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";color:var(--amber);font-size:24px;line-height:1;transition:transform .2s}
+  details[open] summary::after{content:"–"}
+  details p{color:var(--muted);margin:10px 0 0}
+
+  /* Footer */
+  footer{background:#0B2A4A;color:#CADCFC;padding:56px 0 28px}
+  .foot-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:32px}
+  @media (max-width:820px){.foot-grid{grid-template-columns:1fr 1fr}}
+  footer h4{color:#fff;font-family:'Space Grotesk';font-size:14px;text-transform:uppercase;letter-spacing:2px;margin:0 0 12px}
+  footer a{color:#CADCFC;display:block;padding:4px 0}
+  footer a:hover{color:#fff;text-decoration:none}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.12);margin-top:36px;padding-top:20px;font-size:13px;color:#8DA6D9;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 140 140" aria-hidden="true">
+        <rect x="10" y="10" width="120" height="120" rx="28" fill="#0B2A4A"/>
+        <circle cx="106" cy="32" r="6" fill="#FFB627"/>
+        <path d="M25 70 L70 34 L115 70 L115 74 L25 74 Z" fill="#FFB627"/>
+        <g transform="translate(18,74)">
+          <path d="M7 20 L16 7 H88 L97 20 V34 H7 Z" fill="#F7F9FC"/>
+          <circle cx="25" cy="36" r="7" fill="#1A1D23"/><circle cx="79" cy="36" r="7" fill="#1A1D23"/>
+        </g>
+      </svg>
+      RideBack <span style="color:var(--amber);margin-left:4px">Buddy</span>
+    </a>
+    <div class="links">
+      <a class="navlink" href="#how">How it works</a>
+      <a class="navlink" href="#pricing">Pricing</a>
+      <a class="navlink" href="#safety">Safety</a>
+      <a class="navlink" href="#faq">FAQ</a>
+      <a class="btn primary" href="#book">Book a ride</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill"><span class="dot"></span> Now booking · Canada</span>
+      <h1 style="margin-top:18px">Get home safely &mdash;<br/><span style="color:var(--amber)">car and all.</span></h1>
+      <p class="sub">Two professional drivers arrive in ten minutes. One drives you home in <em>your own car</em>. The other follows and picks them up. You wake up with your car in the driveway.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#book">Book a ride in 60 seconds →</a>
+        <a class="btn ghost" style="color:#fff;border-color:rgba(255,255,255,.3)" href="#how">See how it works</a>
+      </div>
+      <div class="stats">
+        <div class="s"><b>$49</b>Flat starting fare</div>
+        <div class="s"><b>10 min</b>Average pickup</div>
+        <div class="s"><b>0 km</b>Your car leaves behind</div>
+        <div class="s"><b>24/7</b>Support line</div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="phone">
+        <div class="screen">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div style="font-family:'Space Grotesk';font-weight:700;color:var(--navy)">Your RideBack</div>
+            <span class="pill" style="padding:2px 8px;font-size:11px"><span class="dot"></span> On the way</span>
+          </div>
+          <div class="map">
+            <svg viewBox="0 0 300 160" preserveAspectRatio="none">
+              <path d="M20 100 Q70 60 130 80 T260 50" fill="none" stroke="#14406F" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+            </svg>
+            <div class="pin"></div>
+            <div class="pin home"></div>
+          </div>
+          <div class="row">
+            <div class="av">JM</div>
+            <div>
+              <div style="font-weight:600;font-family:'Space Grotesk';color:var(--navy)">Jordan M. &amp; Priya S.</div>
+              <div style="color:var(--muted);font-size:13px">Your two-driver team · Corolla Hybrid chase</div>
+            </div>
+          </div>
+          <div class="fare">
+            <span>Flat fare</span><span style="color:var(--amber)">$69.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="wrap">
+    <span class="eyebrow">How it works</span>
+    <h2>From &ldquo;I shouldn&rsquo;t drive&rdquo; to your driveway, in four simple steps.</h2>
+    <p>No cabs, no morning-after car retrieval, no logistics at 1&nbsp;am. Just two people who show up.</p>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Open the app</h3><p>Tell us where you are and which vehicle is yours. We&rsquo;ll quote a flat fare in seconds.</p></div>
+      <div class="step"><div class="n">2</div><h3>We arrive in 10 minutes</h3><p>Two uniformed drivers pull up in our branded chase car. One is about to become your designated driver.</p></div>
+      <div class="step"><div class="n">3</div><h3>Ride home in your car</h3><p>Sit back as a passenger in your own vehicle. Your driver follows every traffic law like it&rsquo;s their own licence.</p></div>
+      <div class="step"><div class="n">4</div><h3>Wake up at home</h3><p>Car parked in your driveway. Keys on the counter. Night handled.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section style="background:var(--cloud)">
+  <div class="wrap">
+    <span class="eyebrow">Why RideBack Buddy</span>
+    <h2>The only ride home that brings your car too.</h2>
+    <p>Rideshare leaves the car at the restaurant. Cabs do the same. We don&rsquo;t.</p>
+    <div class="values" style="margin-top:36px">
+      <div class="value">
+        <div class="ico">🚗</div>
+        <h3>Your car comes home</h3>
+        <p>No taxi back in the morning. No parking ticket at 7 am. No awkward rescue favour from your brother-in-law.</p>
+      </div>
+      <div class="value">
+        <div class="ico">🛡️</div>
+        <h3>Fully insured, fully vetted</h3>
+        <p>Commercial hired-auto insurance above your policy. Every driver background-checked, trained, and dashcam-equipped.</p>
+      </div>
+      <div class="value">
+        <div class="ico">💳</div>
+        <h3>Flat fare, no surge</h3>
+        <p>You see the price before you book. No &ldquo;demand pricing&rdquo; at midnight on New Year&rsquo;s Eve. Ever.</p>
+      </div>
+      <div class="value">
+        <div class="ico">👥</div>
+        <h3>Two people, one team</h3>
+        <p>You&rsquo;re never alone in a stranger&rsquo;s car. Two drivers travel together &mdash; safer for you, safer for them.</p>
+      </div>
+      <div class="value">
+        <div class="ico">🇨🇦</div>
+        <h3>Built for Canada</h3>
+        <p>Winter tires, block heaters, Interac. We know that Fri night at &minus;22&deg;C is when you need us most.</p>
+      </div>
+      <div class="value">
+        <div class="ico">🏢</div>
+        <h3>Corporate-friendly</h3>
+        <p>One monthly invoice. Pre-authorized limits for holiday parties and client dinners. HR dashboard included.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing">
+  <div class="wrap">
+    <span class="eyebrow">Pricing</span>
+    <h2>Flat, fair, and the same at 1&thinsp;pm or 1&thinsp;am.</h2>
+    <p>Upfront fare quoted in the app. No surge. No mystery fees. Tips always optional.</p>
+    <div class="prices">
+      <div class="price">
+        <h3>In-city</h3>
+        <div class="big">$49<small> flat</small></div>
+        <p style="color:var(--muted);margin:0">Up to 15&nbsp;km inside your metro.</p>
+        <ul>
+          <li>Two-driver team, 10-min average pickup</li>
+          <li>$0.90 / km over 15 km</li>
+          <li>Hybrid chase car, fully insured</li>
+        </ul>
+      </div>
+      <div class="price feature">
+        <span class="tag">Most booked</span>
+        <h3>Metro</h3>
+        <div class="big">$69<small> flat</small></div>
+        <p style="color:var(--muted);margin:0">15–40&nbsp;km. Suburb-to-city and city-to-suburb.</p>
+        <ul>
+          <li>Everything in In-city, plus</li>
+          <li>Highway-certified drivers</li>
+          <li>Pre-book 2+ hours ahead and save 10%</li>
+        </ul>
+      </div>
+      <div class="price">
+        <h3>Regional</h3>
+        <div class="big">$1.75<small> / km</small></div>
+        <p style="color:var(--muted);margin:0">40–100&nbsp;km. Cottage country, weddings, long nights.</p>
+        <ul>
+          <li>Custom quote in the app, no surprise add-ons</li>
+          <li>Chase-car return fee of $15</li>
+          <li>Pre-book required for trips over 60 km</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:22px;color:var(--muted);font-size:14px">Late-night (12 am–4 am) adds 20% to the base fare. Not surge &mdash; just the honest math of paying two drivers to work overnights.</p>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="book" class="booking">
+  <div class="wrap booking-grid">
+    <div>
+      <span class="eyebrow" style="color:var(--amber)">Book a ride</span>
+      <h2>Tell us where you are. We&rsquo;ll handle the rest.</h2>
+      <p class="lead">Fares lock in as soon as you book. Pay in the app &mdash; card, Apple Pay, Google Pay, or Interac. Two drivers on the way within minutes.</p>
+      <ul style="list-style:none;padding:0;margin:20px 0 0;color:#CADCFC;font-size:15px">
+        <li style="padding:6px 0">✔ Live driver tracking on every ride</li>
+        <li style="padding:6px 0">✔ Photo of your vehicle before and after</li>
+        <li style="padding:6px 0">✔ 24/7 support line: 1-800-XXX-XXXX</li>
+      </ul>
+    </div>
+    <form class="form-card" id="bookForm" onsubmit="return submitBooking(event)">
+      <h3 style="margin-bottom:18px">Get your fare in 30 seconds</h3>
+      <div class="form-grid">
+        <div><label>Pickup address</label><input id="pickup" required placeholder="e.g. 123 Queen St W, Toronto" value="The Keg Steakhouse, Brampton"/></div>
+        <div><label>Drop-off (home)</label><input id="dropoff" required placeholder="Your home address" value="48 Maple Dr, Caledon"/></div>
+        <div><label>Pickup time</label><select id="when"><option>As soon as possible</option><option>In 30 minutes</option><option>In 1 hour</option><option>In 2 hours</option><option>Pre-book (–10%)</option></select></div>
+        <div><label>Your vehicle</label><select id="vehicle"><option>Sedan / Compact</option><option>SUV / Crossover</option><option>Pickup truck</option><option>Minivan</option><option>EV (Tesla, Ioniq, etc.)</option></select></div>
+        <div><label>Distance (approx km)</label><input id="km" type="number" min="1" max="150" value="22" required/></div>
+        <div><label>Phone number</label><input id="phone" type="tel" required placeholder="416-555-0102" value="416-555-0102"/></div>
+        <div class="full"><label>Notes for your driver (optional)</label><textarea id="notes" rows="2" placeholder="e.g. manual transmission, child seat in back"></textarea></div>
+      </div>
+      <div class="fare-box"><span class="label">Flat fare quote</span><span class="amount" id="fare">$69.00</span></div>
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center;margin-top:16px">Confirm booking →</button>
+      <p style="color:var(--muted);font-size:12px;margin-top:10px;text-align:center">By booking you agree to our Terms &amp; Privacy. Fare is locked at confirmation.</p>
+
+      <div class="confirm" id="confirm">
+        <div class="check">✓</div>
+        <h3>You&rsquo;re set.</h3>
+        <p style="color:var(--muted);margin:4px 0 14px">Your two-driver team is on the way. Watch for texts.</p>
+        <div class="booking-id" id="bid">RBB-XXXXXX</div>
+        <p style="color:var(--muted);font-size:13px;margin-top:14px">Need to change or cancel? Call 1-800-XXX-XXXX.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- TRUST / SAFETY -->
+<section id="safety" class="trust">
+  <div class="wrap">
+    <span class="eyebrow">Safety &amp; trust</span>
+    <h2>Tight ops so you don&rsquo;t have to worry.</h2>
+    <div class="trust-grid">
+      <div class="t"><div class="ico">🧾</div><h4>Vetted drivers</h4><p>Criminal record check. 5+ yrs licensed. Annual training.</p></div>
+      <div class="t"><div class="ico">🛡️</div><h4>Commercial insurance</h4><p>Hired &amp; non-owned auto policy sits above your own.</p></div>
+      <div class="t"><div class="ico">📹</div><h4>Dashcam every ride</h4><p>Disclosed at booking. Footage retained per PIPEDA.</p></div>
+      <div class="t"><div class="ico">📷</div><h4>Vehicle photo check</h4><p>Before and after &mdash; so there are no surprises.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap" style="max-width:820px;margin:0 auto">
+    <span class="eyebrow">Answers</span>
+    <h2>Common questions.</h2>
+    <details><summary>Is my car actually insured?</summary><p>Yes. Your own policy provides primary coverage. Our commercial hired-auto policy sits on top for liability and damage while our driver is at the wheel. Plain-English details are in the Terms link at booking.</p></details>
+    <details><summary>Why two drivers?</summary><p>One drives your car, one drives our chase car to collect the first driver afterward. It also means you are never alone in a stranger&rsquo;s vehicle &mdash; safer for everyone.</p></details>
+    <details><summary>What if I drive a manual transmission or a Tesla?</summary><p>Just tell us at booking. We match you with a driver trained on that vehicle. Manuals, EVs, and even classic cars are fine.</p></details>
+    <details><summary>How is this different from Uber or a taxi?</summary><p>Rideshare and taxis pick you up in their car and leave yours behind. We use your car. You wake up with it in the driveway. That&rsquo;s the whole idea.</p></details>
+    <details><summary>Do you serve all of Canada?</summary><p>We&rsquo;re launching city by city, starting with a pilot metro in 2026. Enter your postal code in the app to see live coverage &mdash; and to request service if we&rsquo;re not there yet.</p></details>
+    <details><summary>Can I book for someone else?</summary><p>Absolutely. Enter their name and phone number at booking and pay on your card. Common for parents, spouses, or corporate accounts covering employees.</p></details>
+    <details><summary>What&rsquo;s your cancellation policy?</summary><p>Free to cancel up to 5 minutes after booking. After that, a flat $15 cancellation applies so our drivers (already on the way) are paid for their time.</p></details>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section style="background:linear-gradient(135deg,#0B2A4A,#14406F);color:#fff;padding:64px 0">
+  <div class="wrap" style="text-align:center">
+    <h2 style="color:#fff">Ready when you are.</h2>
+    <p style="color:#CADCFC;max-width:560px;margin:0 auto 20px">Open the app, or book from any browser. Your car is about to have a very safe night.</p>
+    <a class="btn primary" href="#book">Book your RideBack →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg viewBox="0 0 140 140" width="40" height="40" aria-hidden="true">
+          <rect x="10" y="10" width="120" height="120" rx="28" fill="#14406F"/>
+          <circle cx="106" cy="32" r="6" fill="#FFB627"/>
+          <path d="M25 70 L70 34 L115 70 L115 74 L25 74 Z" fill="#FFB627"/>
+          <g transform="translate(18,74)">
+            <path d="M7 20 L16 7 H88 L97 20 V34 H7 Z" fill="#F7F9FC"/>
+            <circle cx="25" cy="36" r="7" fill="#1A1D23"/><circle cx="79" cy="36" r="7" fill="#1A1D23"/>
+          </g>
+        </svg>
+        <div style="font-family:'Space Grotesk';font-weight:700;color:#fff;font-size:20px">RideBack <span style="color:var(--amber)">Buddy</span></div>
+      </div>
+      <p style="max-width:320px;color:#8DA6D9;font-size:14px;margin-top:12px">The Canadian designated-driver service that gets you &mdash; and your car &mdash; home safely.</p>
+    </div>
+    <div><h4>Company</h4><a href="#">About</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Blog</a></div>
+    <div><h4>Service</h4><a href="#pricing">Pricing</a><a href="#safety">Safety</a><a href="#">Corporate</a><a href="#">Venue partners</a></div>
+    <div><h4>Support</h4><a href="tel:18000000000">1-800-XXX-XXXX</a><a href="mailto:hi@ridebackbuddy.ca">hi@ridebackbuddy.ca</a><a href="#faq">FAQ</a><a href="#">Terms &amp; Privacy</a></div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>&copy; 2026 RideBack Buddy Inc. &middot; Built in Canada.</span>
+    <span>Home safely. Car and all.</span>
+  </div>
+</footer>
+
+<script>
+  // Live fare estimate
+  function estimateFare() {
+    const km = Math.max(1, parseInt(document.getElementById('km').value || 20, 10));
+    const when = document.getElementById('when').value;
+    let fare;
+    if (km <= 15) fare = 49;
+    else if (km <= 40) fare = 69 + Math.max(0, km - 40) * 0.9;
+    else fare = Math.round(km * 1.75) + 15;
+    if (km > 15 && km < 40) fare = 69;
+    if (km > 40 && km <= 100) fare = Math.round(km * 1.75) + 15;
+    if (when.toLowerCase().includes('pre-book')) fare = Math.round(fare * 0.9);
+    document.getElementById('fare').textContent = '$' + fare.toFixed(2);
+  }
+  document.getElementById('km').addEventListener('input', estimateFare);
+  document.getElementById('when').addEventListener('change', estimateFare);
+  estimateFare();
+
+  function submitBooking(e){
+    e.preventDefault();
+    const id = 'RBB-' + Math.random().toString(36).slice(2,8).toUpperCase();
+    document.getElementById('bid').textContent = id;
+    document.querySelector('#bookForm .form-grid').style.display='none';
+    document.querySelector('#bookForm .fare-box').style.display='none';
+    document.querySelector('#bookForm button[type=submit]').style.display='none';
+    document.querySelector('#confirm').style.display='block';
+    return false;
+  }
+</script>
+</body>
+</html>
