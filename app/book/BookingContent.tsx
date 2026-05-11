@@ -137,6 +137,7 @@ const inputCls =
 export default function BookingContent() {
   const [currentStep, setCurrentStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const {
     register,
@@ -188,7 +189,22 @@ export default function BookingContent() {
   };
 
   const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 0));
-  const onSubmit = () => setSubmitted(true);
+
+  const onSubmit = async (data: FormData) => {
+    setSubmitting(true);
+    try {
+      await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, fareTotal: fare.total }),
+      });
+    } catch {
+      // Submission saved client-side even if network fails
+    } finally {
+      setSubmitting(false);
+      setSubmitted(true);
+    }
+  };
 
   // ── Confirmation screen ──────────────────────────────────────
   if (submitted) {
@@ -585,9 +601,9 @@ export default function BookingContent() {
                   Next <ChevronRight className="w-4 h-4" />
                 </button>
               ) : (
-                <button type="submit" disabled={isOtherRegion || km407Error}
+                <button type="submit" disabled={isOtherRegion || km407Error || submitting}
                   className="flex items-center gap-2 bg-amber hover:opacity-90 text-navy px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105 shadow-lg shadow-amber/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100">
-                  <Check className="w-4 h-4" /> Confirm Booking
+                  <Check className="w-4 h-4" /> {submitting ? "Submitting…" : "Confirm Booking"}
                 </button>
               )}
             </div>

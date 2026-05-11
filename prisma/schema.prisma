@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Booking {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  status            String   @default("pending")
+
+  // Ride details
+  serviceType       String
+  pickupDate        String
+  pickupTime        String
+  pickupAddress     String
+  dropoffAddress    String
+  estimatedDistance Float?
+  region            String
+  paymentMethod     String
+  stops             Int      @default(0)
+  use407            Boolean  @default(false)
+  km407             Float    @default(0)
+  specialNotes      String?
+
+  // Personal info
+  fullName          String
+  phone             String
+  email             String
+  passengers        Int      @default(1)
+  accessibility     Boolean  @default(false)
+
+  // Fare
+  fareTotal         Float
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  status    String   @default("unread")
+
+  name      String
+  phone     String
+  email     String
+  message   String
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+}
+
+model PricingSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  label     String
+  updatedAt DateTime @updatedAt
+}
