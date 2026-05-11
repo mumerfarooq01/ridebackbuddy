@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Trash2, X } from "lucide-react";
+import { Plus, Trash2, X, KeyRound } from "lucide-react";
 
 interface User {
   id: string;
@@ -27,6 +27,12 @@ export default function UsersPage() {
   const [saving, setSaving] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
+  const [showPwModal, setShowPwModal] = useState(false);
+  const [pwForm, setPwForm] = useState({ currentPassword: "", newPassword: "", confirm: "" });
+  const [pwError, setPwError] = useState("");
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwSuccess, setPwSuccess] = useState(false);
+
   useEffect(() => {
     fetch("/api/admin/users").then((r) => r.json()).then(setUsers).finally(() => setLoading(false));
     fetch("/api/auth/me").then((r) => r.json()).then((d) => setCurrentUserId(d.user?.id ?? null));
@@ -50,6 +56,34 @@ export default function UsersPage() {
     } else {
       const data = await res.json();
       setError(data.error || "Failed to create user");
+    }
+  };
+
+  const changePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwError("");
+    if (pwForm.newPassword !== pwForm.confirm) {
+      setPwError("New passwords do not match");
+      return;
+    }
+    if (pwForm.newPassword.length < 8) {
+      setPwError("Password must be at least 8 characters");
+      return;
+    }
+    setPwSaving(true);
+    const res = await fetch(`/api/admin/users/${currentUserId}/password`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currentPassword: pwForm.currentPassword, newPassword: pwForm.newPassword }),
+    });
+    setPwSaving(false);
+    if (res.ok) {
+      setPwSuccess(true);
+      setPwForm({ currentPassword: "", newPassword: "", confirm: "" });
+      setTimeout(() => { setShowPwModal(false); setPwSuccess(false); }, 1500);
+    } else {
+      const data = await res.json();
+      setPwError(data.error || "Failed to update password");
     }
   };
 
@@ -90,7 +124,7 @@ export default function UsersPage() {
           <table className="w-full text-sm">
             <thead className="bg-cloud">
               <tr>
-                {["Name", "Email", "Role", "Created", ""].map((h, i) => (
+                {["Name", "Email", "Role", "Created", "", ""].map((h, i) => (
                   <th key={i} className="px-6 py-3 text-left text-xs font-semibold text-muted uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
@@ -107,6 +141,17 @@ export default function UsersPage() {
                   </td>
                   <td className="px-6 py-4 text-muted">{new Date(u.createdAt).toLocaleDateString("en-CA")}</td>
                   <td className="px-6 py-4">
+                    {u.id === currentUserId && (
+                      <button
+                        onClick={() => setShowPwModal(true)}
+                        className="flex items-center gap-1.5 text-xs text-muted hover:text-navy transition-colors"
+                        title="Change password"
+                      >
+                        <KeyRound className="w-3.5 h-3.5" /> Change password
+                      </button>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
                     {u.id !== currentUserId && (
                       <button
                         onClick={() => deleteUser(u.id)}
@@ -120,6 +165,75 @@ export default function UsersPage() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Change password modal */}
+      {showPwModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-heading text-lg font-bold text-navy">Change Password</h2>
+              <button onClick={() => { setShowPwModal(false); setPwError(""); setPwSuccess(false); }} className="text-muted hover:text-navy">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {pwSuccess ? (
+              <div className="text-center py-6">
+                <div className="w-12 h-12 rounded-full bg-mint/20 flex items-center justify-center mx-auto mb-3">
+                  <KeyRound className="w-6 h-6 text-green-600" />
+                </div>
+                <p className="font-semibold text-navy">Password updated!</p>
+              </div>
+            ) : (
+              <form onSubmit={changePassword} className="space-y-4">
+                <div>
+                  <label className="block text-sm text-muted mb-1.5">Current Password</label>
+                  <input
+                    type="password" required value={pwForm.currentPassword}
+                    onChange={(e) => setPwForm({ ...pwForm, currentPassword: e.target.value })}
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-muted mb-1.5">New Password</label>
+                  <input
+                    type="password" required minLength={8} value={pwForm.newPassword}
+                    onChange={(e) => setPwForm({ ...pwForm, newPassword: e.target.value })}
+                    placeholder="Min. 8 characters" className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-muted mb-1.5">Confirm New Password</label>
+                  <input
+                    type="password" required value={pwForm.confirm}
+                    onChange={(e) => setPwForm({ ...pwForm, confirm: e.target.value })}
+                    className={inputCls}
+                  />
+                </div>
+
+                {pwError && <p className="text-red-500 text-sm">{pwError}</p>}
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => { setShowPwModal(false); setPwError(""); }}
+                    className="flex-1 py-3 rounded-xl border border-mist text-muted hover:bg-cloud transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={pwSaving}
+                    className="flex-1 bg-amber hover:opacity-90 text-navy py-3 rounded-xl font-semibold transition-all disabled:opacity-50"
+                  >
+                    {pwSaving ? "Saving…" : "Update Password"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
       )}
 

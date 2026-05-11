@@ -15,8 +15,8 @@ const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! } a
 const prisma = new PrismaClient({ adapter } as any);
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL ?? "admin@ridebackbuddy.com";
-  const password = process.env.ADMIN_PASSWORD ?? "change-me";
+  const email = "admin@ridebackbuddy.com";
+  const password = "RideBack@2024!";
   const name = "Admin";
 
   const existing = await prisma.user.findUnique({ where: { email } });
