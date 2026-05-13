@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #F7F9FC;
-  --foreground: #1A1D23;
+  --background: #f7f9fc;
+  --foreground: #1a1d23;
 }
 
 * {
@@ -25,8 +25,14 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family:
+    var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
   letter-spacing: -0.02em;
 }
 
@@ -36,16 +42,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: #F7F9FC;
+  background: #f7f9fc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E6EAF2;
+  background: #e6eaf2;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5B6473;
+  background: #5b6473;
 }
 
 /* Glass effect utility */
@@ -63,18 +69,18 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #0B2A4A, #14406F);
+    background: linear-gradient(135deg, #0b2a4a, #14406f);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .bg-gradient-brand {
-    background: linear-gradient(135deg, #0B2A4A 0%, #14406F 100%);
+    background: linear-gradient(135deg, #0b2a4a 0%, #14406f 100%);
   }
 
   .bg-gradient-gold {
-    background: linear-gradient(135deg, #FFB627 0%, #FFCB66 100%);
+    background: linear-gradient(135deg, #ffb627 0%, #ffcb66 100%);
   }
 
   .text-balance {
@@ -90,6 +96,10 @@ h1, h2, h3, h4, h5, h6 {
 
   ::selection {
     background: rgba(255, 182, 39, 0.3);
-    color: #1A1D23;
+    color: #1a1d23;
   }
+}
+
+.pt-30 {
+  padding-top: 100px;
 }

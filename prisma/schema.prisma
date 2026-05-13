@@ -17,7 +17,11 @@ model Booking {
   pickupDate        String
   pickupTime        String
   pickupAddress     String
+  pickupLat         Float?
+  pickupLng         Float?
   dropoffAddress    String
+  dropoffLat        Float?
+  dropoffLng        Float?
   estimatedDistance Float?
   region            String
   paymentMethod     String

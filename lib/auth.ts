@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
+import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const SECRET = process.env.JWT_SECRET!;
+const SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 const COOKIE = "rb_admin_token";
 
 export interface JwtPayload {
@@ -11,13 +11,17 @@ export interface JwtPayload {
   role: string;
 }
 
-export function signToken(payload: JwtPayload): string {
-  return jwt.sign(payload, SECRET, { expiresIn: "7d" });
+export async function signToken(payload: JwtPayload): Promise<string> {
+  return new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("7d")
+    .sign(SECRET);
 }
 
-export function verifyToken(token: string): JwtPayload | null {
+export async function verifyToken(token: string): Promise<JwtPayload | null> {
   try {
-    return jwt.verify(token, SECRET) as JwtPayload;
+    const { payload } = await jwtVerify(token, SECRET);
+    return payload as unknown as JwtPayload;
   } catch {
     return null;
   }

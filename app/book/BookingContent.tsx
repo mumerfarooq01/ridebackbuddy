@@ -8,9 +8,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Car, User, ClipboardCheck, ChevronRight, ChevronLeft, Check,
   MapPin, Calendar, Clock, MessageSquare, Phone, Mail, Users,
-  Accessibility, Calculator, PartyPopper, Truck, HeartPulse,
+  Accessibility, PartyPopper, Truck, HeartPulse,
   Minus, Plus, AlertTriangle,
 } from "lucide-react";
+import AddressAutocomplete from "@/components/shared/AddressAutocomplete";
 
 // ── Official Ride Home DD rate sheet ────────────────────────────
 //   Base: $31.00 for first 10 km, then $2.75/km (rounded up to next whole km)
@@ -101,7 +102,11 @@ const formSchema = z.object({
   pickupDate: z.string().min(1, "Please select a date"),
   pickupTime: z.string().min(1, "Please select a time"),
   pickupAddress: z.string().min(3, "Please enter a pickup address"),
+  pickupLat: z.number().optional(),
+  pickupLng: z.number().optional(),
   dropoffAddress: z.string().min(3, "Please enter a drop-off address"),
+  dropoffLat: z.number().optional(),
+  dropoffLng: z.number().optional(),
   estimatedDistance: z.string().optional(),
   region: z.string(),
   paymentMethod: z.string(),
@@ -138,6 +143,7 @@ export default function BookingContent() {
   const [currentStep, setCurrentStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const {
     register,
@@ -153,7 +159,11 @@ export default function BookingContent() {
       pickupDate: "",
       pickupTime: "",
       pickupAddress: "",
+      pickupLat: undefined,
+      pickupLng: undefined,
       dropoffAddress: "",
+      dropoffLat: undefined,
+      dropoffLng: undefined,
       estimatedDistance: "",
       region: "none",
       paymentMethod: "cash",
@@ -169,8 +179,37 @@ export default function BookingContent() {
     },
   });
 
+  const [distanceLoading, setDistanceLoading] = useState(false);
+
   const fv = watch();
   const kmNum = Math.max(0, parseFloat(fv.estimatedDistance || "0") || 0);
+
+  const calculateDistance = (
+    pickupLat: number, pickupLng: number,
+    dropoffLat: number, dropoffLng: number,
+  ) => {
+    if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) return;
+    setDistanceLoading(true);
+    const service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
+      {
+        origins: [new google.maps.LatLng(pickupLat, pickupLng)],
+        destinations: [new google.maps.LatLng(dropoffLat, dropoffLng)],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC,
+      },
+      (response, status) => {
+        setDistanceLoading(false);
+        if (status === "OK" && response) {
+          const element = response.rows[0]?.elements[0];
+          if (element?.status === "OK") {
+            const km = Math.ceil(element.distance.value / 1000);
+            setValue("estimatedDistance", String(km));
+          }
+        }
+      },
+    );
+  };
   const stopsNum = Math.min(5, Math.max(0, Number(fv.stops) || 0));
   const km407Num = Math.max(0, Number(fv.km407) || 0);
   const isOtherRegion = fv.region === "other";
@@ -192,17 +231,23 @@ export default function BookingContent() {
 
   const onSubmit = async (data: FormData) => {
     setSubmitting(true);
+    setSubmitError("");
     try {
-      await fetch("/api/bookings", {
+      const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, fareTotal: fare.total }),
       });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        setSubmitError(json.error || "Failed to submit booking. Please try again.");
+        return;
+      }
+      setSubmitted(true);
     } catch {
-      // Submission saved client-side even if network fails
+      setSubmitError("Network error. Please check your connection and try again.");
     } finally {
       setSubmitting(false);
-      setSubmitted(true);
     }
   };
 
@@ -337,12 +382,36 @@ export default function BookingContent() {
                   {/* Addresses */}
                   <div>
                     <label className="flex items-center gap-2 text-sm text-muted mb-2"><MapPin className="w-4 h-4" /> Pickup Address</label>
-                    <input type="text" placeholder="123 Main St, Mississauga, ON" {...register("pickupAddress")} className={inputCls} />
+                    <AddressAutocomplete
+                      value={fv.pickupAddress}
+                      placeholder="123 Main St, Mississauga, ON"
+                      className={inputCls}
+                      onChange={(v) => setValue("pickupAddress", v)}
+                      onSelect={(address, lat, lng) => {
+                        setValue("pickupAddress", address);
+                        setValue("pickupLat", lat);
+                        setValue("pickupLng", lng);
+                        const dLat = fv.dropoffLat, dLng = fv.dropoffLng;
+                        if (dLat && dLng) calculateDistance(lat, lng, dLat, dLng);
+                      }}
+                    />
                     {errors.pickupAddress && <p className="text-amber text-xs mt-1">{errors.pickupAddress.message}</p>}
                   </div>
                   <div>
                     <label className="flex items-center gap-2 text-sm text-muted mb-2"><MapPin className="w-4 h-4" /> Drop-off Address</label>
-                    <input type="text" placeholder="456 Oak Ave, Oakville, ON" {...register("dropoffAddress")} className={inputCls} />
+                    <AddressAutocomplete
+                      value={fv.dropoffAddress}
+                      placeholder="456 Oak Ave, Oakville, ON"
+                      className={inputCls}
+                      onChange={(v) => setValue("dropoffAddress", v)}
+                      onSelect={(address, lat, lng) => {
+                        setValue("dropoffAddress", address);
+                        setValue("dropoffLat", lat);
+                        setValue("dropoffLng", lng);
+                        const pLat = fv.pickupLat, pLng = fv.pickupLng;
+                        if (pLat && pLng) calculateDistance(pLat, pLng, lat, lng);
+                      }}
+                    />
                     {errors.dropoffAddress && <p className="text-amber text-xs mt-1">{errors.dropoffAddress.message}</p>}
                   </div>
 
@@ -371,7 +440,11 @@ export default function BookingContent() {
                   {/* Distance & Stops */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="flex items-center gap-2 text-sm text-muted mb-2"><Calculator className="w-4 h-4" /> Est. Distance (km)</label>
+                      <label className="flex items-center gap-2 text-sm text-muted mb-2">
+                        <MapPin className="w-4 h-4" /> Est. Distance (km)
+                        {distanceLoading && <span className="text-xs text-amber animate-pulse">Calculating…</span>}
+                        {!distanceLoading && fv.pickupLat && fv.dropoffLat && <span className="text-xs text-green-600">Auto-calculated</span>}
+                      </label>
                       <input type="number" min="0" step="0.1" placeholder="15" {...register("estimatedDistance")} className={inputCls} />
                     </div>
                     <div>
@@ -415,7 +488,7 @@ export default function BookingContent() {
                     {fv.use407 && (
                       <div>
                         <label className="block text-sm text-muted mb-2">Approx. km on 407</label>
-                        <input type="number" min="0" step="1" placeholder="0" {...register("km407")}
+                        <input type="number" min="0" step="1" placeholder="0" {...register("km407", { valueAsNumber: true })}
                           className={`${inputCls} ${km407Error ? "border-red-400 focus:border-red-400" : ""}`} />
                         {km407Error && <p className="text-red-500 text-xs mt-1">407 km cannot exceed total trip distance.</p>}
                       </div>
@@ -587,7 +660,13 @@ export default function BookingContent() {
             </AnimatePresence>
 
             {/* Navigation */}
-            <div className="flex items-center justify-between mt-6">
+            {submitError && (
+              <p className="mt-4 text-red-500 text-sm bg-red-50 border border-red-100 rounded-lg px-4 py-2">
+                {submitError}
+              </p>
+            )}
+
+            <div className="flex items-center justify-between mt-4">
               {currentStep > 0 ? (
                 <button type="button" onClick={prevStep}
                   className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white border border-mist text-muted hover:text-navy hover:bg-mist transition-all shadow-sm">
@@ -600,8 +679,12 @@ export default function BookingContent() {
                   className="flex items-center gap-2 bg-amber hover:opacity-90 text-navy px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105 shadow-lg shadow-amber/20">
                   Next <ChevronRight className="w-4 h-4" />
                 </button>
+              ) : isOtherRegion ? (
+                <div className="text-sm text-amber font-semibold">
+                  Call Dispatch to book — <a href="tel:6475017433" className="underline">647-501-7433</a>
+                </div>
               ) : (
-                <button type="submit" disabled={isOtherRegion || km407Error || submitting}
+                <button type="submit" disabled={km407Error || submitting}
                   className="flex items-center gap-2 bg-amber hover:opacity-90 text-navy px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105 shadow-lg shadow-amber/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100">
                   <Check className="w-4 h-4" /> {submitting ? "Submitting…" : "Confirm Booking"}
                 </button>
