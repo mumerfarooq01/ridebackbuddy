@@ -17,8 +17,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const token = await signToken({ id: user.id, email: user.email, name: user.name, role: user.role });
+    // Record login
+    await prisma.loginLog.create({
+      data: {
+        role: "admin",
+        entityId: user.id,
+        entityName: user.name,
+        email: user.email,
+        ip: req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? null,
+        userAgent: req.headers.get("user-agent") ?? null,
+      },
+    });
 
+    const token = await signToken({ id: user.id, email: user.email, name: user.name, role: user.role });
     const res = NextResponse.json({ ok: true });
     res.cookies.set(COOKIE, token, {
       httpOnly: true,

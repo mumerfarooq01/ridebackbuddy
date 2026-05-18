@@ -39,6 +39,23 @@ model Booking {
 
   // Fare
   fareTotal         Float
+
+  // Driver assignment
+  driverId          String?
+  driver            Driver?  @relation(fields: [driverId], references: [id])
+}
+
+model Driver {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  email       String    @unique
+  password    String
+  name        String
+  phone       String
+  licenseNo   String?
+  vehicleInfo String?
+  status      String    @default("offline")
+  bookings    Booking[]
 }
 
 model Contact {
@@ -59,6 +76,26 @@ model User {
   password  String
   name      String
   role      String   @default("admin")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+}
+
+model LoginLog {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  role       String
+  entityId   String
+  entityName String
+  email      String
+  ip         String?
+  userAgent  String?
 }
 
 model PricingSetting {

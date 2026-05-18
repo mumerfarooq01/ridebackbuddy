@@ -5,17 +5,16 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import logoImage from "@/app/assets/images/logo.png";
-import logoLight from "@/app/assets/images/logo-light.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services & Pricing" },
-  { href: "/book", label: "Book a Ride" },
+  // { href: "/book", label: "Book a Ride" },
   { href: "/about", label: "About Us" },
-  { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },
+  { href: "/drive-with-us", label: "Drive with Us" },
 ];
 
 export default function Navbar() {
@@ -43,7 +42,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             <Image
-              src={isHome && !isScrolled ? logoLight : logoImage}
+              src={logoImage}
               alt="RideBack Buddy"
               width={220}
               height={60}
@@ -82,6 +81,16 @@ export default function Navbar() {
               647-501-7433
             </a>
             <Link
+              href="/login"
+              className={`text-sm font-medium transition-colors ${
+                isHome && !isScrolled
+                  ? "text-white/85 hover:text-white"
+                  : "text-muted hover:text-navy"
+              }`}
+            >
+              Sign In
+            </Link>
+            <Link
               href="/book"
               className="bg-amber hover:bg-amber-light text-navy px-5 py-2.5 rounded-lg font-heading font-semibold text-sm transition-all duration-150 hover:-translate-y-0.5 shadow-md"
             >
@@ -99,7 +108,11 @@ export default function Navbar() {
             }`}
             aria-label="Toggle menu"
           >
-            {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMobileOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -132,6 +145,13 @@ export default function Navbar() {
                   <Phone className="w-4 h-4" />
                   647-501-7433
                 </a>
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="block mt-2 text-center border border-mist text-navy px-5 py-3 rounded-lg font-heading font-semibold transition-colors hover:bg-mist"
+                >
+                  Sign In
+                </Link>
                 <Link
                   href="/book"
                   onClick={() => setIsMobileOpen(false)}

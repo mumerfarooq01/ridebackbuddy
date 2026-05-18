@@ -10,6 +10,7 @@ const quickLinks = [
   { href: "/about", label: "About Us" },
   { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },
+  { href: "/drive-with-us", label: "Drive with Us" },
 ];
 
 const phoneNumbers = [

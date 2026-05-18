@@ -20,9 +20,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Ride Home Designated Drivers | Get You AND Your Car Home Safely",
+  title: "RideBack | Your Night. Your Car. Our Driver.",
   description:
-    "Ontario's trusted designated driver service since 2011. Serving Mississauga, Oakville, Burlington, Hamilton & GTA. Book your safe ride home tonight.",
+    "Your Night. Your Car. Our Driver. Ontario's trusted designated driver service since 2011. Serving Mississauga, Oakville, Burlington, Hamilton & GTA. Book your safe ride home tonight.",
   keywords:
     "designated driver, ride home, safe ride, GTA driver, Mississauga driver, Oakville, Burlington, Hamilton",
   icons: {

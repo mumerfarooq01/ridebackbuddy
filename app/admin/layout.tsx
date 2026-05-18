@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import logoLight from "@/app/assets/images/logo-light.png";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Car,
   LayoutDashboard,
   CalendarCheck,
   MessageSquare,
@@ -12,15 +13,21 @@ import {
   LogOut,
   Menu,
   X,
+  UserCheck,
+  CircleUserRound,
+  Shield,
 } from "lucide-react";
 import { useState } from "react";
 
 const navLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
+  { href: "/admin/drivers", label: "Drivers", icon: UserCheck },
   { href: "/admin/contacts", label: "Contacts", icon: MessageSquare },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/pricing", label: "Pricing", icon: DollarSign },
+  { href: "/admin/login-history", label: "Login History", icon: Shield },
+  { href: "/admin/profile", label: "My Profile", icon: CircleUserRound },
 ];
 
 export default function AdminLayout({
@@ -49,13 +56,8 @@ export default function AdminLayout({
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-60 bg-navy flex flex-col transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
-          <div className="w-8 h-8 rounded-lg bg-amber flex items-center justify-center">
-            <Car className="w-4 h-4 text-navy" />
-          </div>
-          <span className="font-heading font-bold text-white text-sm">
-            RideBack Admin
-          </span>
+        <div className="flex items-center justify-center px-6 py-4 border-b border-white/10">
+          <Image src={logoLight} alt="RideBack Buddy" width={120} height={120} className="h-14 w-auto" />
         </div>
 
         <nav className="flex-1 px-3 py-4 space-y-1">

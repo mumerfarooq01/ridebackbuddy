@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendBookingConfirmation, sendNewBookingToAdmins } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,6 +31,41 @@ export async function POST(req: NextRequest) {
         fareTotal: Number(body.fareTotal) || 0,
       },
     });
+    // Fire confirmation email to customer
+    sendBookingConfirmation({
+      toEmail: booking.email,
+      fullName: booking.fullName,
+      serviceType: booking.serviceType,
+      pickupDate: booking.pickupDate,
+      pickupTime: booking.pickupTime,
+      pickupAddress: booking.pickupAddress,
+      dropoffAddress: booking.dropoffAddress,
+      passengers: booking.passengers,
+      fareTotal: booking.fareTotal,
+      paymentMethod: booking.paymentMethod,
+      specialNotes: booking.specialNotes,
+    }).catch((e) => console.error("Booking confirmation email failed", e));
+
+    // Notify all admins
+    prisma.user.findMany({ select: { email: true } }).then((admins) => {
+      const adminEmails = admins.map((a) => a.email);
+      return sendNewBookingToAdmins({
+        toEmails: adminEmails,
+        fullName: booking.fullName,
+        phone: booking.phone,
+        email: booking.email,
+        serviceType: booking.serviceType,
+        pickupDate: booking.pickupDate,
+        pickupTime: booking.pickupTime,
+        pickupAddress: booking.pickupAddress,
+        dropoffAddress: booking.dropoffAddress,
+        passengers: booking.passengers,
+        fareTotal: booking.fareTotal,
+        paymentMethod: booking.paymentMethod,
+        specialNotes: booking.specialNotes,
+      });
+    }).catch((e) => console.error("Admin booking notification failed", e));
+
     return NextResponse.json({ id: booking.id }, { status: 201 });
   } catch (err) {
     console.error("POST /api/bookings", err);

@@ -150,8 +150,8 @@ export default function Hero() {
           </span>
 
           <h1 className="hero-text font-heading font-bold leading-[1.05] tracking-tight mt-5 text-[clamp(36px,5vw,60px)]">
-            Get home safely —<br />
-            <span className="text-amber">car and all.</span>
+            Your Night. Your Car.<br />
+            <span className="text-amber">Our Driver.</span>
           </h1>
 
           <p className="hero-text mt-4 mb-7 text-[#CADCFC] text-lg max-w-[560px] leading-relaxed">
