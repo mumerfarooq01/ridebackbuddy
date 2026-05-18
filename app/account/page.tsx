@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin, Clock, Car, Phone, CalendarCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { MapPin, Clock, Car, Phone, CalendarCheck, RotateCcw } from "lucide-react";
 
 interface Driver { name: string; phone: string; vehicleInfo: string | null }
 interface Booking {
@@ -12,11 +13,24 @@ interface Booking {
   pickupDate: string;
   pickupTime: string;
   pickupAddress: string;
+  pickupLat: number | null;
+  pickupLng: number | null;
   dropoffAddress: string;
-  fareTotal: number;
+  dropoffLat: number | null;
+  dropoffLng: number | null;
+  estimatedDistance: number | null;
+  region: string;
   paymentMethod: string;
-  passengers: number;
+  stops: number;
+  use407: boolean;
+  km407: number;
   specialNotes: string | null;
+  fullName: string;
+  phone: string;
+  email: string;
+  fareTotal: number;
+  passengers: number;
+  accessibility: boolean;
   driver: Driver | null;
 }
 
@@ -76,12 +90,41 @@ export default function AccountPage() {
 }
 
 function BookingCard({ b }: { b: Booking }) {
+  const router = useRouter();
+
   const statusColors: Record<string, string> = {
     pending:   "bg-amber/20 text-amber-800",
     confirmed: "bg-green-100 text-green-700",
     completed: "bg-blue-50 text-blue-700",
     cancelled: "bg-red-50 text-red-600",
   };
+
+  const handleRebook = () => {
+    const data = {
+      serviceType:       b.serviceType,
+      pickupAddress:     b.pickupAddress,
+      pickupLat:         b.pickupLat,
+      pickupLng:         b.pickupLng,
+      dropoffAddress:    b.dropoffAddress,
+      dropoffLat:        b.dropoffLat,
+      dropoffLng:        b.dropoffLng,
+      estimatedDistance: b.estimatedDistance,
+      region:            b.region,
+      paymentMethod:     b.paymentMethod,
+      stops:             b.stops,
+      use407:            b.use407,
+      km407:             b.km407,
+      specialNotes:      b.specialNotes,
+      fullName:          b.fullName,
+      phone:             b.phone,
+      email:             b.email,
+      passengers:        b.passengers,
+      accessibility:     b.accessibility,
+    };
+    sessionStorage.setItem("ridebackRebook", JSON.stringify(data));
+    router.push("/book");
+  };
+
   return (
     <div className="bg-white rounded-2xl border border-mist shadow-sm p-5">
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -110,19 +153,28 @@ function BookingCard({ b }: { b: Booking }) {
         </div>
       </div>
 
-      {b.driver && (
-        <div className="pt-3 border-t border-mist flex items-center gap-4 flex-wrap">
-          <div className="flex items-center gap-1.5 text-xs text-muted">
-            <Car className="w-3 h-3" />
-            <span className="text-navy font-medium">{b.driver.name}</span>
-            {b.driver.vehicleInfo && <span>· {b.driver.vehicleInfo}</span>}
+      <div className="pt-3 border-t border-mist flex items-center justify-between gap-4 flex-wrap">
+        {b.driver ? (
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-1.5 text-xs text-muted">
+              <Car className="w-3 h-3" />
+              <span className="text-navy font-medium">{b.driver.name}</span>
+              {b.driver.vehicleInfo && <span>· {b.driver.vehicleInfo}</span>}
+            </div>
+            <a href={`tel:${b.driver.phone}`}
+              className="flex items-center gap-1.5 text-xs text-amber font-semibold hover:underline">
+              <Phone className="w-3 h-3" /> {b.driver.phone}
+            </a>
           </div>
-          <a href={`tel:${b.driver.phone}`}
-            className="flex items-center gap-1.5 text-xs text-amber font-semibold hover:underline">
-            <Phone className="w-3 h-3" /> {b.driver.phone}
-          </a>
-        </div>
-      )}
+        ) : <div />}
+
+        <button
+          onClick={handleRebook}
+          className="flex items-center gap-1.5 text-xs font-semibold text-navy bg-amber/15 hover:bg-amber/30 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+        >
+          <RotateCcw className="w-3 h-3" /> Book Again
+        </button>
+      </div>
     </div>
   );
 }

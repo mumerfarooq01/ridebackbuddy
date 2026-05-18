@@ -298,6 +298,7 @@ export async function sendNewBookingToAdmins(d: NewBookingAdminData) {
 
 // ─── 5. Temp password → admin user or driver ──────────────────────────────────
 
+
 export interface TempPasswordData {
   toEmail: string;
   name: string;
@@ -330,6 +331,47 @@ export async function sendTempPassword(d: TempPasswordData) {
     from: FROM,
     to: d.toEmail,
     subject: "🔑 Your temporary password – RideBack Buddy",
+    html: wrap(body),
+  });
+}
+
+// ─── 6. Welcome with auto-generated password → new customer ──────────────────
+
+export interface WelcomeWithPasswordData {
+  toEmail: string;
+  name: string;
+  tempPassword: string;
+  loginUrl: string;
+}
+
+export async function sendWelcomeWithPassword(d: WelcomeWithPasswordData) {
+  const body = `
+    <h2 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#0E1B35;">Welcome to RideBack Buddy! 🎉</h2>
+    <p style="margin:0 0 24px;font-size:15px;color:#4B5E82;">Hi ${d.name}, your booking created an account for you. Sign in anytime to view your rides and book again in seconds.</p>
+
+    ${section("Your login", "📧")}
+    ${table([row("Email", d.toEmail)].join(""))}
+
+    <div style="background:#FFF8E7;border:2px dashed #FFB627;border-radius:14px;padding:20px;text-align:center;margin:20px 0;">
+      <p style="margin:0 0 6px;font-size:12px;font-weight:600;color:#7A4F00;letter-spacing:1px;text-transform:uppercase;">Temporary Password</p>
+      <p style="margin:0;font-size:28px;font-weight:700;color:#0E1B35;letter-spacing:3px;font-family:monospace;">${d.tempPassword}</p>
+    </div>
+
+    <div style="text-align:center;margin-bottom:24px;">
+      <a href="${d.loginUrl}" style="display:inline-block;background:#FFB627;color:#0E1B35;font-weight:700;font-size:15px;padding:12px 28px;border-radius:12px;text-decoration:none;">
+        View My Bookings →
+      </a>
+    </div>
+
+    <div style="background:#FEF2F2;border-radius:12px;padding:14px 18px;border-left:3px solid #F87171;">
+      <p style="margin:0;font-size:13px;color:#991B1B;">⚠️ Please change your password after logging in from your Profile page.</p>
+    </div>
+  `;
+
+  return send({
+    from: FROM,
+    to: d.toEmail,
+    subject: "Welcome to RideBack Buddy – Your account is ready 🎉",
     html: wrap(body),
   });
 }

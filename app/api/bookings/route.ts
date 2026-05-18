@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { sendBookingConfirmation, sendNewBookingToAdmins } from "@/lib/email";
+import bcrypt from "bcryptjs";
+import { sendBookingConfirmation, sendNewBookingToAdmins, sendWelcomeWithPassword } from "@/lib/email";
+
+function generateTempPassword(len = 10): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  return Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,6 +37,9 @@ export async function POST(req: NextRequest) {
         fareTotal: Number(body.fareTotal) || 0,
       },
     });
+
+    const origin = req.headers.get("origin") ?? "https://ridebackbuddy.com";
+
     // Fire confirmation email to customer
     sendBookingConfirmation({
       toEmail: booking.email,
@@ -65,6 +74,31 @@ export async function POST(req: NextRequest) {
         specialNotes: booking.specialNotes,
       });
     }).catch((e) => console.error("Admin booking notification failed", e));
+
+    // Auto-create customer account if this email is new
+    prisma.customer.findUnique({ where: { email: booking.email } })
+      .then(async (existing) => {
+        if (!existing) {
+          const tempPassword = generateTempPassword();
+          const hashed = await bcrypt.hash(tempPassword, 12);
+          await prisma.customer.create({
+            data: {
+              email: booking.email,
+              name: booking.fullName,
+              phone: booking.phone || null,
+              password: hashed,
+            },
+          });
+          await sendWelcomeWithPassword({
+            toEmail: booking.email,
+            name: booking.fullName,
+            tempPassword,
+            loginUrl: `${origin}/login`,
+          });
+          console.log("[bookings] Auto-created customer account for:", booking.email);
+        }
+      })
+      .catch((e) => console.error("[bookings] Auto-create customer failed", e));
 
     return NextResponse.json({ id: booking.id }, { status: 201 });
   } catch (err) {

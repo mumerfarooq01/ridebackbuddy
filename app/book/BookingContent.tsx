@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -151,6 +151,7 @@ export default function BookingContent() {
     watch,
     trigger,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -180,6 +181,39 @@ export default function BookingContent() {
   });
 
   const [distanceLoading, setDistanceLoading] = useState(false);
+
+  // Pre-fill form when navigating from "Book Again"
+  useEffect(() => {
+    const raw = sessionStorage.getItem("ridebackRebook");
+    if (!raw) return;
+    sessionStorage.removeItem("ridebackRebook");
+    try {
+      const d = JSON.parse(raw);
+      reset({
+        serviceType:       d.serviceType ?? "",
+        pickupDate:        "",
+        pickupTime:        "",
+        pickupAddress:     d.pickupAddress ?? "",
+        pickupLat:         d.pickupLat ?? undefined,
+        pickupLng:         d.pickupLng ?? undefined,
+        dropoffAddress:    d.dropoffAddress ?? "",
+        dropoffLat:        d.dropoffLat ?? undefined,
+        dropoffLng:        d.dropoffLng ?? undefined,
+        estimatedDistance: d.estimatedDistance != null ? String(d.estimatedDistance) : "",
+        region:            d.region ?? "none",
+        paymentMethod:     d.paymentMethod ?? "cash",
+        stops:             Number(d.stops) || 0,
+        use407:            Boolean(d.use407),
+        km407:             Number(d.km407) || 0,
+        specialNotes:      d.specialNotes ?? "",
+        fullName:          d.fullName ?? "",
+        phone:             d.phone ?? "",
+        email:             d.email ?? "",
+        passengers:        String(d.passengers ?? "1"),
+        accessibility:     Boolean(d.accessibility),
+      });
+    } catch { /* ignore malformed data */ }
+  }, [reset]);
 
   const fv = watch();
   const kmNum = Math.max(0, parseFloat(fv.estimatedDistance || "0") || 0);
