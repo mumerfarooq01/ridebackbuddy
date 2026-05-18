@@ -3,7 +3,7 @@ import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
 
 const resend = new Resend(process.env.RESEND_KEY);
-const FROM = process.env.RESEND_FROM ?? "RideBack <onboarding@resend.dev>";
+const FROM = process.env.RESEND_FROM ?? "";
 
 async function sendEmail(payload: Parameters<typeof resend.emails.send>[0]) {
   const { error } = await resend.emails.send(payload);

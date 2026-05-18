@@ -7,7 +7,7 @@ async function send(payload: Parameters<typeof resend.emails.send>[0]) {
   if (error) throw new Error(error.message ?? "Resend error");
   return data;
 }
-const FROM = process.env.RESEND_FROM ?? "RideBack <onboarding@resend.dev>";
+const FROM = process.env.RESEND_FROM ?? "";
 
 // ─── Shared layout ────────────────────────────────────────────────────────────
 
