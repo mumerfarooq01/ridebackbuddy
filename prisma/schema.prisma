@@ -98,6 +98,20 @@ model LoginLog {
   userAgent  String?
 }
 
+model DriverApplication {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  status       String   @default("pending") // pending | approved | rejected
+  firstName    String
+  lastName     String
+  email        String
+  phone        String
+  area         String
+  experience   String
+  availability String
+  notes        String?
+}
+
 model PricingSetting {
   id        String   @id @default(cuid())
   key       String   @unique

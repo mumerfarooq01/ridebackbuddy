@@ -23,6 +23,20 @@ export async function POST(req: NextRequest) {
       ? availability.join(", ")
       : availability || "Not specified";
 
+    // Save application to DB
+    await prisma.driverApplication.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        phone,
+        area,
+        experience,
+        availability: availabilityList,
+        notes: notes || null,
+      },
+    });
+
     // Fetch all admin emails from DB
     const admins = await prisma.user.findMany({ select: { email: true } });
     const adminEmails = admins.map((a) => a.email);
@@ -60,7 +74,7 @@ export async function POST(req: NextRequest) {
                 .join("")}
             </table>
             <div style="margin-top:24px;background:#FFF8E7;border-radius:10px;padding:14px 18px;border-left:3px solid #FFB627;">
-              <p style="margin:0;font-size:13px;color:#7A4F00;">Reply to this email to contact the applicant directly.</p>
+              <p style="margin:0;font-size:13px;color:#7A4F00;">Review and approve this application from the Admin Dashboard → Driver Applications.</p>
             </div>
           </div>
         </div>

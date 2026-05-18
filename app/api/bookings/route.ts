@@ -43,15 +43,23 @@ export async function POST(req: NextRequest) {
     // Fire confirmation email to customer
     sendBookingConfirmation({
       toEmail: booking.email,
+      bookingId: booking.id,
       fullName: booking.fullName,
+      phone: booking.phone,
       serviceType: booking.serviceType,
       pickupDate: booking.pickupDate,
       pickupTime: booking.pickupTime,
       pickupAddress: booking.pickupAddress,
       dropoffAddress: booking.dropoffAddress,
       passengers: booking.passengers,
-      fareTotal: booking.fareTotal,
+      accessibility: booking.accessibility,
+      estimatedDistance: booking.estimatedDistance,
+      region: booking.region,
       paymentMethod: booking.paymentMethod,
+      stops: booking.stops,
+      use407: booking.use407,
+      km407: booking.km407,
+      fareTotal: booking.fareTotal,
       specialNotes: booking.specialNotes,
     }).catch((e) => console.error("Booking confirmation email failed", e));
 

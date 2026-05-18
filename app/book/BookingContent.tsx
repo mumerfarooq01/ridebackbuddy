@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import {
   Minus, Plus, AlertTriangle,
 } from "lucide-react";
 import AddressAutocomplete from "@/components/shared/AddressAutocomplete";
+import { importLibrary } from "@googlemaps/js-api-loader";
 
 // ── Official Ride Home DD rate sheet ────────────────────────────
 //   Base: $31.00 for first 10 km, then $2.75/km (rounded up to next whole km)
@@ -151,6 +152,7 @@ export default function BookingContent() {
     watch,
     trigger,
     setValue,
+    getValues,
     reset,
     formState: { errors },
   } = useForm<FormData>({
@@ -181,6 +183,33 @@ export default function BookingContent() {
   });
 
   const [distanceLoading, setDistanceLoading] = useState(false);
+
+  const calculateDistance = useCallback(async (
+    pickupLat: number, pickupLng: number,
+    dropoffLat: number, dropoffLng: number,
+  ) => {
+    if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) return;
+    setDistanceLoading(true);
+    try {
+      const { DistanceMatrixService } = await importLibrary("routes") as google.maps.RoutesLibrary;
+      const service = new DistanceMatrixService();
+      const response = await service.getDistanceMatrix({
+        origins: [{ lat: pickupLat, lng: pickupLng }],
+        destinations: [{ lat: dropoffLat, lng: dropoffLng }],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC,
+      });
+      const element = response.rows[0]?.elements[0];
+      if (element?.status === "OK") {
+        const km = Math.ceil(element.distance.value / 1000);
+        setValue("estimatedDistance", String(km));
+      }
+    } catch (e) {
+      console.error("Distance calculation failed", e);
+    } finally {
+      setDistanceLoading(false);
+    }
+  }, [setValue]);
 
   // Pre-fill form when navigating from "Book Again"
   useEffect(() => {
@@ -218,32 +247,6 @@ export default function BookingContent() {
   const fv = watch();
   const kmNum = Math.max(0, parseFloat(fv.estimatedDistance || "0") || 0);
 
-  const calculateDistance = (
-    pickupLat: number, pickupLng: number,
-    dropoffLat: number, dropoffLng: number,
-  ) => {
-    if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) return;
-    setDistanceLoading(true);
-    const service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix(
-      {
-        origins: [new google.maps.LatLng(pickupLat, pickupLng)],
-        destinations: [new google.maps.LatLng(dropoffLat, dropoffLng)],
-        travelMode: google.maps.TravelMode.DRIVING,
-        unitSystem: google.maps.UnitSystem.METRIC,
-      },
-      (response, status) => {
-        setDistanceLoading(false);
-        if (status === "OK" && response) {
-          const element = response.rows[0]?.elements[0];
-          if (element?.status === "OK") {
-            const km = Math.ceil(element.distance.value / 1000);
-            setValue("estimatedDistance", String(km));
-          }
-        }
-      },
-    );
-  };
   const stopsNum = Math.min(5, Math.max(0, Number(fv.stops) || 0));
   const km407Num = Math.max(0, Number(fv.km407) || 0);
   const isOtherRegion = fv.region === "other";
@@ -425,7 +428,7 @@ export default function BookingContent() {
                         setValue("pickupAddress", address);
                         setValue("pickupLat", lat);
                         setValue("pickupLng", lng);
-                        const dLat = fv.dropoffLat, dLng = fv.dropoffLng;
+                        const { dropoffLat: dLat, dropoffLng: dLng } = getValues();
                         if (dLat && dLng) calculateDistance(lat, lng, dLat, dLng);
                       }}
                     />
@@ -442,7 +445,7 @@ export default function BookingContent() {
                         setValue("dropoffAddress", address);
                         setValue("dropoffLat", lat);
                         setValue("dropoffLng", lng);
-                        const pLat = fv.pickupLat, pLng = fv.pickupLng;
+                        const { pickupLat: pLat, pickupLng: pLng } = getValues();
                         if (pLat && pLng) calculateDistance(pLat, pLng, lat, lng);
                       }}
                     />

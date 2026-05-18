@@ -16,6 +16,7 @@ import {
   UserCheck,
   CircleUserRound,
   Shield,
+  ClipboardList,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -23,6 +24,7 @@ const navLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
   { href: "/admin/drivers", label: "Drivers", icon: UserCheck },
+  { href: "/admin/driver-applications", label: "Applications", icon: ClipboardList },
   { href: "/admin/contacts", label: "Contacts", icon: MessageSquare },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/pricing", label: "Pricing", icon: DollarSign },
