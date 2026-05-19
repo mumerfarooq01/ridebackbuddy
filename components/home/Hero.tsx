@@ -9,7 +9,6 @@ gsap.registerPlugin(useGSAP);
 
 const stats = [
   { value: "$49", label: "Flat starting fare" },
-  { value: "10 min", label: "Average pickup" },
   { value: "0 km", label: "Your car leaves behind" },
   { value: "24/7", label: "Support line" },
 ];

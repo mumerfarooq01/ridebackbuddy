@@ -11,14 +11,20 @@ function generateTempPassword(len = 10): string {
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
+    console.log("[driver/forgot-password] request for:", email);
     if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 });
 
     const driver = await prisma.driver.findUnique({ where: { email } });
-    if (!driver) return NextResponse.json({ ok: true });
+    if (!driver) {
+      console.log("[driver/forgot-password] driver not found:", email);
+      return NextResponse.json({ ok: true });
+    }
+    console.log("[driver/forgot-password] driver found:", driver.name, driver.email);
 
     const tempPassword = generateTempPassword();
     const hashed = await bcrypt.hash(tempPassword, 12);
     await prisma.driver.update({ where: { email }, data: { password: hashed } });
+    console.log("[driver/forgot-password] password updated in DB");
 
     const origin = req.headers.get("origin") ?? "https://ridebackbuddy.com";
     await sendTempPassword({
@@ -27,10 +33,11 @@ export async function POST(req: NextRequest) {
       tempPassword,
       loginUrl: `${origin}/driver/login`,
     });
+    console.log("[driver/forgot-password] email sent successfully to:", email);
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("POST /api/auth/driver/forgot-password", err);
+    console.error("[driver/forgot-password] ERROR:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
