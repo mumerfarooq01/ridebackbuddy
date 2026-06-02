@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import bcrypt from "bcryptjs";
-import { sendTempPassword } from "@/lib/email";
+import { sendDriverApproved } from "@/lib/email";
 
 function generateTempPassword(len = 10): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -40,12 +40,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     await prisma.driverApplication.update({ where: { id }, data: { status: "approved" } });
 
     const origin = req.headers.get("origin") ?? "https://ridebackbuddy.com";
-    sendTempPassword({
+    sendDriverApproved({
       toEmail: application.email,
       name: `${application.firstName} ${application.lastName}`,
       tempPassword,
       loginUrl: `${origin}/driver/login`,
-    }).catch((e) => console.error("Driver welcome email failed", e));
+    }).catch((e) => console.error("Driver approved email failed", e));
 
     return NextResponse.json({ ok: true, driverId: driver.id });
   }
