@@ -10,9 +10,10 @@ function generateTempPassword(len = 10): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const raw = (await req.json())?.email;
+    if (!raw) return NextResponse.json({ error: "Email required" }, { status: 400 });
+    const email = String(raw).trim().toLowerCase();
     console.log("[driver/forgot-password] request for:", email);
-    if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 });
 
     const driver = await prisma.driver.findUnique({ where: { email } });
     if (!driver) {

@@ -5,7 +5,9 @@ import { signToken, DRIVER_COOKIE } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
+    const body = await req.json();
+    const email = String(body?.email ?? "").trim().toLowerCase();
+    const password = body?.password;
 
     const driver = await prisma.driver.findUnique({ where: { email } });
     if (!driver) {
