@@ -1,7 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import logoLight from "@/app/assets/images/logo-light.png";
-import { Phone, Clock, MapPin, Globe, Share2, ExternalLink } from "lucide-react";
+import {
+  Phone,
+  Clock,
+  MapPin,
+  Globe,
+  Share2,
+  ExternalLink,
+} from "lucide-react";
 
 const quickLinks = [
   { href: "/", label: "Home" },
@@ -14,10 +21,7 @@ const quickLinks = [
 ];
 
 const phoneNumbers = [
-  { label: "Main", number: "1-249-59-BUDDY", tel: "12495928339" },
-  { label: "Hamilton", number: "289-683-4323" },
-  { label: "Burlington/Oakville", number: "905-805-4323" },
-  { label: "Mississauga", number: "416-752-4323" },
+  { label: "Main", number: "+1-249-59-BUDDY", tel: "+12495928339" },
 ];
 
 export default function Footer() {
@@ -37,8 +41,8 @@ export default function Footer() {
               />
             </Link>
             <p className="text-white/70 text-sm leading-relaxed">
-              Ontario&apos;s trusted designated driver service since 2011.
-              We get you AND your car home safely.
+              Ontario&apos;s trusted designated driver service since 2011. We
+              get you AND your car home safely.
             </p>
             <div className="flex items-center gap-3 mt-5">
               <a
@@ -95,7 +99,8 @@ export default function Footer() {
                   >
                     <Phone className="w-3.5 h-3.5" />
                     <span>
-                      <span className="text-white/50">{p.label}:</span> {p.number}
+                      <span className="text-white/50">{p.label}:</span>{" "}
+                      {p.number}
                     </span>
                   </a>
                 </li>
@@ -136,7 +141,8 @@ export default function Footer() {
       <div className="border-t border-white/10 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white/50 text-xs">
-            © {new Date().getFullYear()} Ride Home Designated Drivers. All rights reserved.
+            © {new Date().getFullYear()} Ride Home Designated Drivers. All
+            rights reserved.
           </p>
           <p className="text-white/40 text-xs">
             Serving Ontario&apos;s GTA since 2011
