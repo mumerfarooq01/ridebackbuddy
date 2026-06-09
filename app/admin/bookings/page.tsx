@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Trash2, UserCheck } from "lucide-react";
 
 interface DriverSummary {
@@ -49,6 +50,7 @@ const driverStatusDot: Record<string, string> = {
 };
 
 export default function BookingsPage() {
+  const router = useRouter();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [drivers, setDrivers] = useState<DriverSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -143,7 +145,11 @@ export default function BookingsPage() {
               </thead>
               <tbody className="divide-y divide-mist">
                 {filtered.map((b) => (
-                  <tr key={b.id} className="hover:bg-cloud/50 transition-colors">
+                  <tr
+                    key={b.id}
+                    onClick={() => router.push(`/admin/bookings/${b.id}`)}
+                    className="hover:bg-cloud/50 transition-colors cursor-pointer"
+                  >
                     <td className="px-5 py-4">
                       <p className="font-medium text-navy">{b.fullName}</p>
                       <p className="text-muted text-xs">{b.phone}</p>
@@ -170,7 +176,7 @@ export default function BookingsPage() {
                       <p className="font-semibold text-navy">${b.fareTotal.toFixed(2)}</p>
                       <p className="text-muted text-xs capitalize">{b.paymentMethod}</p>
                     </td>
-                    <td className="px-5 py-4 min-w-[160px]">
+                    <td className="px-5 py-4 min-w-[160px]" onClick={(e) => e.stopPropagation()}>
                       {b.driver ? (
                         <div className="flex items-center gap-1.5 mb-1">
                           <span
@@ -196,7 +202,7 @@ export default function BookingsPage() {
                         </select>
                       </div>
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4" onClick={(e) => e.stopPropagation()}>
                       <select
                         value={b.status}
                         onChange={(e) => updateStatus(b.id, e.target.value)}
@@ -209,7 +215,7 @@ export default function BookingsPage() {
                         ))}
                       </select>
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => deleteBooking(b.id)}
                         className="text-muted hover:text-red-500 transition-colors"

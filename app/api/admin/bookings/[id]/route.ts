@@ -3,6 +3,24 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { sendDriverAssignedToUser, sendBookingAssignedToDriver } from "@/lib/email";
 
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const session = await getSession();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { id } = await params;
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+    include: {
+      driver: {
+        select: { id: true, name: true, email: true, phone: true, status: true, vehicleInfo: true, licenseNo: true },
+      },
+    },
+  });
+
+  if (!booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json(booking);
+}
+
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

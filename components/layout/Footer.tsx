@@ -14,7 +14,7 @@ const quickLinks = [
 ];
 
 const phoneNumbers = [
-  { label: "Main", number: "647-501-7433" },
+  { label: "Main", number: "1-249-59-BUDDY", tel: "12495928339" },
   { label: "Hamilton", number: "289-683-4323" },
   { label: "Burlington/Oakville", number: "905-805-4323" },
   { label: "Mississauga", number: "416-752-4323" },
@@ -90,7 +90,7 @@ export default function Footer() {
               {phoneNumbers.map((p) => (
                 <li key={p.number}>
                   <a
-                    href={`tel:${p.number.replace(/-/g, "")}`}
+                    href={`tel:${p.tel ?? p.number.replace(/-/g, "")}`}
                     className="flex items-center gap-2 text-white/70 hover:text-amber text-sm transition-colors"
                   >
                     <Phone className="w-3.5 h-3.5" />
@@ -125,7 +125,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start gap-2 text-sm text-white/70 pt-2">
                 <MapPin className="w-4 h-4 mt-0.5 text-amber" />
-                <p>Mississauga, Oakville, Burlington, Hamilton & GTA</p>
+                <p>312-610 Farmstead Drive, Milton, ON L9T 8X5</p>
               </div>
             </div>
           </div>
